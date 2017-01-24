@@ -27,10 +27,11 @@ export class HomePage {
       let parser = new xml2js.Parser(
       {
         trim: true,
-        explicitArray: true
+        explicitArray: false
       });
       parser.parseString(data["_body"],function(err,result){
-        console.log(result);
+        console.log(result.Auris.PrepaidAccount.balance);
+        console.log(result.Auris.PrepaidAccount.response_msg);
       });
     });
   }   
