@@ -27,7 +27,7 @@ export class HomePage {
       let parser = new xml2js.Parser(
       {
         trim: true,
-        explicitArray: false
+        explicitArray: true
       });
       parser.parseString(data["_body"],function(err,result){
         console.log(result.Auris.PrepaidAccount[0].response_msg);
