@@ -16,7 +16,7 @@ export class HomePage {
   constructor(public navCtrl: NavController, public http: Http) {
     console.log("Constructor called");    
     this.Myhttp = http;
-    this.load(this.Myhttp);
+    //this.load(this.Myhttp);
   }
 
   load(http){
