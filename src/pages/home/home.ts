@@ -31,10 +31,10 @@ export class HomePage {
       });
       parser.parseString(data["_body"],function(err,result){
         console.log(result.Auris.PrepaidAccount[0].response_msg);
-        console.log(result.Auris.Record[0].AccountPlanInfo.PlanName);
-        console.log(result.Auris.Record[1].AccountPlanInfo.PlanName);
-        console.log(result.Auris.Record[0].AccountPlanInfo[0].PlanName);
-        console.log(result.Auris.Record[1].AccountPlanInfo[0].PlanName);
+        for (let k in result.Auris.Record){
+          console.log(result.Auris.Record[k].AccountPlanInfo[0].PlanName);
+        }
+                
       });
     });
   }   
