@@ -20,7 +20,7 @@ export class HomePage {
   }
 
   load(http){
-    this.http.get('https://service1.auris.com/vclec/mobileapps/623789211A/Services.asp?transaction_type=563&product_id=10053&ani_number=3055886662&response_type=03').
+    this.http.get('https://service1.auris.com/vclec/mobileapps/623789211A/Services.asp?transaction_type=565&product_id=10053&ani_number=3055886662&response_type=03').
     subscribe(data => {
       console.log(data["_body"]);
 
@@ -30,8 +30,9 @@ export class HomePage {
         explicitArray: false
       });
       parser.parseString(data["_body"],function(err,result){
-        console.log(result.Auris.PrepaidAccount.balance);
-        console.log(result.Auris.PrepaidAccount.response_msg);
+        console.log(result.Auris.PrepaidAccount[0].response_msg);
+        console.log(result.Auris.Record[0].PlanName);
+        console.log(result.Auris.Record[1].PlanName);
       });
     });
   }   
