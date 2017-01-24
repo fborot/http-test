@@ -20,7 +20,7 @@ export class HomePage {
   }
 
   load(http){
-    this.http.get('https://service1.auris.com/vclec/mobileapps/623789211A/Services.asp?transaction_type=563&product_id=10053&ani_number=3055886662').subscribe(data => {
+    this.http.get('https://service1.auris.com/vclec/mobileapps/623789211A/Services.asp?transaction_type=563&product_id=10053&ani_number=3055886662&response_type=03').subscribe(data => {
     console.log(data);
     });
   }   
