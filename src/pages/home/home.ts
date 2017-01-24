@@ -11,12 +11,17 @@ import 'rxjs/add/operator/map';
 export class HomePage {
   
   posts : any;
+  Myhttp : Http;
   
   constructor(public navCtrl: NavController, public http: Http) {
-       this.http.get('https://service1.auris.com/vclec/mobileapps/623789211A/Services.asp?transaction_type=563&product_id=10053&ani_number=3055886662').subscribe(data => {
-        //this.posts = data.data.children;
-        console.log(data);
-    });
+    console.log("Constructor called");    
+    this.Myhttp = http;
+    this.load(this.Myhttp);
   }
 
+  load(http){
+    this.http.get('location/of/data').map(res => res.json()).subscribe(data => {
+    console.log(data);
+    });
+  }   
 }
