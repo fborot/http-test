@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
- 
+import xml2js from 'xml2js'; 
 
 @Component({
   selector: 'page-home',
@@ -20,8 +20,17 @@ export class HomePage {
   }
 
   load(http){
-    this.http.get('https://service1.auris.com/vclec/mobileapps/623789211A/Services.asp?transaction_type=563&product_id=10053&ani_number=3055886662&response_type=03').subscribe(data => {
-    console.log(data);
+    this.http.get('https://service1.auris.com/vclec/mobileapps/623789211A/Services.asp?transaction_type=563&product_id=10053&ani_number=3055886662&response_type=03').
+    subscribe(data => {
+      console.log(data);
+      let parser = new xml2js.Parser(
+      {
+        trim: true,
+        explicitArray: true
+      });
+      parser.parseString(data,function(err,result){
+        console.log(result);
+      });
     });
   }   
 }
