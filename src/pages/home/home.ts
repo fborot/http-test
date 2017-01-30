@@ -44,7 +44,7 @@ export class HomePage {
   
   sendMsg(){
 
-    let OPTIONS = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
+    let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
     "Via: SIP/2.0/UDP 172.31.196.224:41234;branch=z9hG4bK313a.3328fa72.0\r\n" + 
     "To: sip:72.13.65.18:5060\r\n" +
     "From: <sip:3055886662@sip.blitztelus.com>;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
