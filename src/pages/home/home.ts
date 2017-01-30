@@ -3,7 +3,8 @@ import { NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import xml2js from 'xml2js'; 
-import dgram from 'dgram';
+
+declare const chrome;
 
 @Component({
   selector: 'page-home',
@@ -43,21 +44,6 @@ export class HomePage {
   
   sendMsg(){
 
-    let server = dgram.createSocket('udp4');
-
-    server.on('error', (err) => {
-      console.log(`server error:\n${err.stack}`);
-      server.close();
-    });
-
-    server.on('message', (msg, rinfo) => {
-      console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
-    });
-
-    server.on('listening', () => {
-      let address = server.address();
-      console.log(`server listening ${address.address}:${address.port}`);
-    });
     let OPTIONS = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
     "Via: SIP/2.0/UDP 172.31.196.224:41234;branch=z9hG4bK313a.3328fa72.0\r\n" + 
     "To: sip:72.13.65.18:5060\r\n" +
@@ -68,8 +54,50 @@ export class HomePage {
     "Content-Length: 0\r\n" +
     "User-Agent: SBC VSX v1.9.1\r\n\r\n";
 
-    server.bind(41234,"172.31.196.224");
+  let PORT = 5060;
 
-    server.send(OPTIONS,0,OPTIONS.length,5060,"72.13.65.18");
+    chrome.sockets.udp.create(function(createInfo) {
+      console.log('create log ' + createInfo);
+      chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {
+        console.log('bind log ' + result);
+        chrome.sockets.udp.send(createInfo.socketId, OPTIONS, "72.13.65.18", PORT, function(result) {
+          if (result < 0) {
+            console.log('send fail: ' + result);
+            chrome.sockets.udp.close(createInfo.socketId);
+          } else {
+            console.log('sendTo: success ' + PORT);
+            chrome.sockets.udp.close(createInfo.socketId);
+          }
+        });
+      });
+    });
+  
+
+    // server.on('error', (err) => {
+    //   console.log(`server error:\n${err.stack}`);
+    //   server.close();
+    // });
+
+    // server.on('message', (msg, rinfo) => {
+    //   console.log(`server got: ${msg} from ${rinfo.address}:${rinfo.port}`);
+    // });
+
+    // server.on('listening', () => {
+    //   let address = server.address();
+    //   console.log(`server listening ${address.address}:${address.port}`);
+    // });
+    // let OPTIONS = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
+    // "Via: SIP/2.0/UDP 172.31.196.224:41234;branch=z9hG4bK313a.3328fa72.0\r\n" + 
+    // "To: sip:72.13.65.18:5060\r\n" +
+    // "From: <sip:3055886662@sip.blitztelus.com>;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
+    // "CSeq: 14 OPTIONS\r\n" +
+    // "Call-ID: 4070cdfb649ada0d-10455@64.45.157.102\r\n" +
+    // "Max-Forwards: 70\r\n" +
+    // "Content-Length: 0\r\n" +
+    // "User-Agent: SBC VSX v1.9.1\r\n\r\n";
+
+    // server.bind(41234,"172.31.196.224");
+
+    // server.send(OPTIONS,0,OPTIONS.length,5060,"72.13.65.18");
   }
 }
