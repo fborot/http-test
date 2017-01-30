@@ -42,6 +42,16 @@ export class HomePage {
     });
   }   
   
+  // str2ab(str) {
+  //   var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+  //   var bufView = new Uint16Array(buf);
+  //   for (var i=0, strLen=str.length; i < strLen; i++) {
+  //   bufView[i] = str.charCodeAt(i);
+  //   }
+  //   return buf;
+  // }
+
+
   sendMsg(){
 
     let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
@@ -56,11 +66,17 @@ export class HomePage {
 
   let PORT = 5060;
 
+    var buf = new ArrayBuffer(OPTIONS.length*2); // 2 bytes for each char
+      var bufView = new Uint16Array(buf);
+      for (var i=0, strLen=OPTIONS.length; i < strLen; i++) {
+        bufView[i] = OPTIONS.charCodeAt(i);
+      }
+
     chrome.sockets.udp.create(function(createInfo) {
       console.log('create log ' + createInfo);
       chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {
         console.log('bind log ' + result);
-        chrome.sockets.udp.send(createInfo.socketId, this.str2ab(OPTIONS), "72.13.65.18", PORT, function(result) {
+        chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(result) {
           if (result < 0) {
             console.log('send fail: ' + result);
             chrome.sockets.udp.close(createInfo.socketId);
@@ -74,13 +90,6 @@ export class HomePage {
   
   }
 
-  str2ab(str) {
-    var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
-    var bufView = new Uint16Array(buf);
-    for (var i=0, strLen=str.length; i < strLen; i++) {
-    bufView[i] = str.charCodeAt(i);
-    }
-    return buf;
-  }
+
 
 }
