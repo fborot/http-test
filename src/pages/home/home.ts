@@ -74,9 +74,11 @@ export class HomePage {
 
     chrome.sockets.udp.create(function(createInfo) {
       console.log('create log ' + createInfo);
-      chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {
-        console.log('bind log ' + result);
+      console.log('create log ' + JSON.stringify(createInfo));
+      //chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {
+        //console.log('bind log ' + result);
         chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(result) {
+          console.log('create log ' + JSON.stringify(result));
           if (result < 0) {
             console.log('send fail: ' + result);
             chrome.sockets.udp.close(createInfo.socketId);
@@ -85,7 +87,7 @@ export class HomePage {
             chrome.sockets.udp.close(createInfo.socketId);
           }
         });
-      });
+      //});
     });
   
   }
