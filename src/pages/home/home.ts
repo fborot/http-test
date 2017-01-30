@@ -66,8 +66,8 @@ export class HomePage {
 
   let PORT = 5060;
 
-    var buf = new ArrayBuffer(OPTIONS.length*2); // 2 bytes for each char
-      var bufView = new Uint16Array(buf);
+    var buf = new ArrayBuffer(OPTIONS.length); // 2 bytes for each char
+      var bufView = new Uint8Array(buf);
       for (var i=0, strLen=OPTIONS.length; i < strLen; i++) {
         bufView[i] = OPTIONS.charCodeAt(i);
       }
