@@ -52,7 +52,7 @@ export class HomePage {
     chrome.sockets.udp.create((createInfo) => {
       console.log('Socket Id created ' + createInfo.socketId);
       let lPort : number = 45678;//-1;
-      let lIP : string = "166.172.186.125"; //"";
+      let lIP : string = "0.0.0.0"; //"";
 
       //this.socket = createInfo.socketId;
       console.log('After assigning socketid: ' + this.socket + ":" + createInfo.socketId);
