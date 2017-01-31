@@ -76,19 +76,20 @@ export class HomePage {
     chrome.sockets.udp.create(function(createInfo) {
       console.log('create log ' + createInfo.socketId);
       chrome.sockets.udp.bind(createInfo.socketId, '10.100.61.17', 41234, function(result) {
-        console.log('bind log ' + result);        
+        console.log('bind log ' + result);    
+        chrome.sockets.udp.onReceive.addListener(function(info){
+          console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
+          console.log(info);
+          chrome.sockets.udp.close(createInfo.socketId);
+        });   
         chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
-            console.log('send log ' + JSON.stringify(sendInfo));
-            chrome.sockets.udp.onReceive.addListener(function(info){
-            console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-            console.log(info);
-          });
+            console.log('send log ' + JSON.stringify(sendInfo));    
           if (sendInfo.resultCode < 0) {
             console.log('send: fail: ' + sendInfo.resultCode);
             chrome.sockets.udp.close(createInfo.socketId);
           } else {
             console.log('send: success ' + sendInfo.resultCode);
-            chrome.sockets.udp.close(createInfo.socketId);
+            //chrome.sockets.udp.close(createInfo.socketId);
           }
         });
       });
