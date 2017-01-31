@@ -122,16 +122,18 @@ export class HomePage {
             let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
             console.log('Recv msg: ' + response);
             console.log('socketId: ' + info.socketId);
+            
+            chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
 
             chrome.sockets.udp.close(info.socketId,function(){
               console.log('Closing socketid: ' + info.socketId);
-              chrome.sockets.udp.getSockets(function(socketsInfo){
-                console.log("Inside getSockets");
-                if (!socketsInfo) return;
-                  for (var i = 0; i < socketsInfo.length; i++) {
-                    console.log(socketsInfo[i]);
-                  }
-              });
+              // chrome.sockets.udp.getSockets(function(socketsInfo){
+              //   console.log("Inside getSockets");
+              //   if (!socketsInfo) return;
+              //     for (var i = 0; i < socketsInfo.length; i++) {
+              //       console.log(socketsInfo[i]);
+              //     }
+              // });
             });
           }
   }
