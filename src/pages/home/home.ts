@@ -74,6 +74,12 @@ export class HomePage {
             console.log('socketId: ' + info.socketId);
             chrome.sockets.udp.close(createInfo.socketId,function(){
               console.log('Closing socketid: ' + createInfo.socketId);
+              chrome.sockets.udp.getSockets(function(socketsInfo){
+                if (!socketsInfo) return;
+                  for (var i = 0; i < socketsInfo.length; i++) {
+                    console.log(socketsInfo[i]);
+                  }
+              })
             });
           }
         });   
