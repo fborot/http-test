@@ -54,7 +54,7 @@ export class HomePage {
       let lPort : number = 45678;//-1;
       let lIP : string = "10.100.61.17"; //"";
 
-      //this.socket = createInfo.socketId;
+      this.socket = createInfo.socketId;
       console.log('After assigning socketid: ' + this.socket + ":" + createInfo.socketId);
       chrome.sockets.udp.bind(createInfo.socketId, lIP, 45678, (result) => {
         console.log('Bind result: ' + result);
@@ -64,27 +64,27 @@ export class HomePage {
           lPort = socketInfo.localPort;
           console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
         });
-        chrome.sockets.udp.onReceive.addListener((info) => {
-          console.log('Inside UDPList: ' + this.socket + ":" + info.socketId + ":" + createInfo.socketId);
-          if (createInfo.socketId == info.socketId) {
-            console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-            //let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
-            let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
-            console.log('Recv msg: ' + response);
-            console.log('socketId: ' + info.socketId);
-            chrome.sockets.udp.close(createInfo.socketId,function(){
-              console.log('Closing socketid: ' + createInfo.socketId);
-              chrome.sockets.udp.getSockets(function(socketsInfo){
-                console.log("Inside getSockets");
-                if (!socketsInfo) return;
-                  for (var i = 0; i < socketsInfo.length; i++) {
-                    console.log(socketsInfo[i]);
-                  }
-              })
-            });
-          }
-        });   
-
+        // chrome.sockets.udp.onReceive.addListener((info) => {
+        //   console.log('Inside UDPList: ' + this.socket + ":" + info.socketId + ":" + createInfo.socketId);
+        //   if (createInfo.socketId == info.socketId) {
+        //     console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
+        //     //let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
+        //     let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
+        //     console.log('Recv msg: ' + response);
+        //     console.log('socketId: ' + info.socketId);
+        //     chrome.sockets.udp.close(createInfo.socketId,function(){
+        //       console.log('Closing socketid: ' + createInfo.socketId);
+        //       chrome.sockets.udp.getSockets(function(socketsInfo){
+        //         console.log("Inside getSockets");
+        //         if (!socketsInfo) return;
+        //           for (var i = 0; i < socketsInfo.length; i++) {
+        //             console.log(socketsInfo[i]);
+        //           }
+        //       })
+        //     });
+        //   }
+        // });   
+        chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
         let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
           "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK313a.3328fa72.0\r\n" + 
           "To: sip:72.13.65.18:5060\r\n" +
@@ -115,19 +115,25 @@ export class HomePage {
   }
 
   UDPReceiveListener = (info) => {
-    console.log('Inside UDPList: ' + this.socket + ":" + info.socketId);
-    if (this.socket == info.socketId) {
-      console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-      //let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
-      let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
-      console.log('Recv msg: ' + response);
-      console.log('socketId: ' + info.socketId);
-      chrome.sockets.udp.close(info.socketId,() => {
-        console.log('Closing socketid: ' + info.socketId);
-      });
-    }
+          console.log('Inside UDPList: ' + this.socket + ":" + info.socketId);
+          if (this.socket == info.socketId) {
+            console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
+            //let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
+            let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
+            console.log('Recv msg: ' + response);
+            console.log('socketId: ' + info.socketId);
+            chrome.sockets.udp.close(info.socketId,function(){
+              console.log('Closing socketid: ' + info.socketId);
+              chrome.sockets.udp.getSockets(function(socketsInfo){
+                console.log("Inside getSockets");
+                if (!socketsInfo) return;
+                  for (var i = 0; i < socketsInfo.length; i++) {
+                    console.log(socketsInfo[i]);
+                  }
+              })
+            });
+          }
   }
-  
 
   sendMsg(){
 
