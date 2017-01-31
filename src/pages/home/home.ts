@@ -77,7 +77,7 @@ export class HomePage {
 
   
     chrome.sockets.udp.create(function(createInfo) {
-      console.log('create log ' + createInfo.socketId);
+      console.log('Socket Id created ' + createInfo.socketId);
       chrome.sockets.udp.bind(createInfo.socketId, '10.100.61.17', 41234, function(result) {
         console.log('bind log ' + result);    
         chrome.sockets.udp.onReceive.addListener(function(info){
@@ -85,7 +85,8 @@ export class HomePage {
           //console.log(this.ab2str(info.data));
           let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
           console.log('Recv msg: ' + response);
-          chrome.sockets.udp.close(createInfo.socketId);
+          console.log('socketId: ' + createInfo.socketId + ":" + info.socketId);
+          chrome.sockets.udp.close(info.socketId);
         });   
         chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
             console.log('send log ' + JSON.stringify(sendInfo));    
