@@ -70,7 +70,7 @@ export class HomePage {
             let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
             console.log('Recv msg: ' + response);
             console.log('socketId: ' + info.socketId);
-            chrome.sockets.udp.close(info.socketId,() => {
+            chrome.sockets.udp.close(info.socketId,function(){
               console.log('Closing socketid: ' + info.socketId);
             });
           }
