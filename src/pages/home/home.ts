@@ -55,14 +55,14 @@ export class HomePage {
   sendMsg(){
 
     let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
-    "Via: SIP/2.0/UDP 172.31.196.224:41234;branch=z9hG4bK313a.3328fa72.0\r\n" + 
+    "Via: SIP/2.0/UDP 10.100.61.17:41234;branch=z9hG4bK313a.3328fa72.0\r\n" + 
     "To: sip:72.13.65.18:5060\r\n" +
-    "From: <sip:3055886662@sip.blitztelus.com>;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
+    "From: <sip:3055886662@10.100.61.17>;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
     "CSeq: 14 OPTIONS\r\n" +
     "Call-ID: 4070cdfb649ada0d-10455@64.45.157.102\r\n" +
     "Max-Forwards: 70\r\n" +
     "Content-Length: 0\r\n" +
-    "User-Agent: SBC VSX v1.9.1\r\n\r\n";
+    "User-Agent: IonicSIP UA\r\n\r\n";
 
   let PORT = 5060;
 
@@ -76,7 +76,7 @@ export class HomePage {
     chrome.sockets.udp.create(function(createInfo) {
       console.log('create log ' + createInfo.socketId);
       //console.log('create log ' + JSON.stringify(createInfo));
-      //chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {
+      chrome.sockets.udp.bind(createInfo.socketId, '10.100.61.17', 41234, function(result) {
         //console.log('bind log ' + result);
         
         chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
