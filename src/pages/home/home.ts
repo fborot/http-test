@@ -53,16 +53,17 @@ export class HomePage {
       console.log('Socket Id created ' + createInfo.socketId);
       let lPort : number = 45678;//-1;
       let lIP : string = "10.100.61.17"; //"";
-      // chrome.sockets.udp.getInfo(createInfo.socketId,function(socketInfo){
-      //   lIP = socketInfo.localAddress;
-      //   lPort = socketInfo.localPort;
-      //   console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
-      // });
+
       //this.socket = createInfo.socketId;
       console.log('After assigning socketid: ' + this.socket + ":" + createInfo.socketId);
       chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, (result) => {
         console.log('Bind result: ' + result);
         console.log('new value: ' + createInfo.socketId);    
+        chrome.sockets.udp.getInfo(createInfo.socketId,function(socketInfo){
+          lIP = socketInfo.localAddress;
+          lPort = socketInfo.localPort;
+          console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
+        });
         chrome.sockets.udp.onReceive.addListener((info) => {
           console.log('Inside UDPList: ' + this.socket + ":" + info.socketId + ":" + createInfo.socketId);
           if (createInfo.socketId == info.socketId) {
