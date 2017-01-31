@@ -82,7 +82,9 @@ export class HomePage {
         console.log('bind log ' + result);    
         chrome.sockets.udp.onReceive.addListener(function(info){
           console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-          console.log(this.ab2str(info.data));
+          //console.log(this.ab2str(info.data));
+          let response: string = String.fromCharCode.apply(null, new Uint8Array(buf));
+          console.log('Recv msg: ' + response);
           chrome.sockets.udp.close(createInfo.socketId);
         });   
         chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
