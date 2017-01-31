@@ -14,12 +14,12 @@ export class HomePage {
   
   posts : any;
   Myhttp : Http;
-  
+  port : number;
 
   constructor(public navCtrl: NavController, public http: Http) {
     console.log("Constructor called");    
     this.Myhttp = http;
-    
+    this.port = 40000;
   }
 
 
@@ -47,12 +47,12 @@ export class HomePage {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
   }
 
-  sendMsg(){
-
+  sendMsg(myport){
+    this.port++;
     let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
-    "Via: SIP/2.0/UDP 10.100.61.17:41234;branch=z9hG4bK313a.3328fa72.0\r\n" + 
+    "Via: SIP/2.0/UDP 10.100.61.17:"+ myport +";branch=z9hG4bK313a.3328fa72.0\r\n" + 
     "To: sip:72.13.65.18:5060\r\n" +
-    "From: <sip:3055886662@10.100.61.17:41234>;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
+    "From: <sip:3055886662@10.100.61.17:"+ myport +">;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
     "CSeq: 14 OPTIONS\r\n" +
     "Call-ID: 4070cdfb649ada0d-10455@64.45.157.102\r\n" +
     "Max-Forwards: 70\r\n" +
@@ -67,10 +67,10 @@ export class HomePage {
         bufView[i] = OPTIONS.charCodeAt(i);
       }
 
-  
+    console.log('Ports: ' + myport + ":" + this.port);
     chrome.sockets.udp.create(function(createInfo) {
       console.log('Socket Id created ' + createInfo.socketId);
-      chrome.sockets.udp.bind(createInfo.socketId, '10.100.61.17', 41234, function(result) {
+      chrome.sockets.udp.bind(createInfo.socketId, '10.100.61.17', myport, function(result) {
         console.log('bind log ' + result);    
         chrome.sockets.udp.onReceive.addListener(function(info){
           console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
