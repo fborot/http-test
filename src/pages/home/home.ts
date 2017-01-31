@@ -61,7 +61,8 @@ export class HomePage {
       //this.socket = createInfo.socketId;
       console.log('After assigning socketid: ' + this.socket + ":" + createInfo.socketId);
       chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, (result) => {
-        console.log('Bind result: ' + result);    
+        console.log('Bind result: ' + result);
+        console.log('new value: ' + createInfo.socketId);    
         chrome.sockets.udp.onReceive.addListener((info) => {
           console.log('Inside UDPList: ' + this.socket + ":" + info.socketId + ":" + createInfo.socketId);
           if (createInfo.socketId == info.socketId) {
@@ -70,8 +71,8 @@ export class HomePage {
             let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
             console.log('Recv msg: ' + response);
             console.log('socketId: ' + info.socketId);
-            chrome.sockets.udp.close(info.socketId,function(){
-              console.log('Closing socketid: ' + info.socketId);
+            chrome.sockets.udp.close(createInfo.socketId,function(){
+              console.log('Closing socketid: ' + createInfo.socketId);
             });
           }
         });   
