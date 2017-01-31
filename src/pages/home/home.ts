@@ -58,13 +58,13 @@ export class HomePage {
       //   lPort = socketInfo.localPort;
       //   console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
       // });
-      this.socket = createInfo.socketId;
+      //this.socket = createInfo.socketId;
       console.log('After assigning socketid: ' + this.socket + ":" + createInfo.socketId);
       chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, (result) => {
         console.log('Bind result: ' + result);    
         chrome.sockets.udp.onReceive.addListener((info) => {
           console.log('Inside UDPList: ' + this.socket + ":" + info.socketId);
-          //if (this.socket == info.socketId) {
+          if (createInfo.socketId == info.socketId) {
             console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
             //let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
             let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
@@ -73,7 +73,7 @@ export class HomePage {
             chrome.sockets.udp.close(info.socketId,function(){
               console.log('Closing socketid: ' + info.socketId);
             });
-          //}
+          }
         });   
 
         let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
