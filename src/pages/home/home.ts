@@ -64,6 +64,7 @@ export class HomePage {
           lPort = socketInfo.localPort;
           console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
         });
+
         // chrome.sockets.udp.onReceive.addListener((info) => {
         //   console.log('Inside UDPList: ' + this.socket + ":" + info.socketId + ":" + createInfo.socketId);
         //   if (createInfo.socketId == info.socketId) {
@@ -118,22 +119,14 @@ export class HomePage {
           console.log('Inside UDPList: ' + this.socket + ":" + info.socketId);
           if (this.socket == info.socketId) {
             console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-            //let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
-            let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
+            let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
+            //let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
             console.log('Recv msg: ' + response);
             console.log('socketId: ' + info.socketId);
             
             chrome.sockets.udp.onReceive.removeListener(this.UDPReceiveListener);
-
             chrome.sockets.udp.close(info.socketId,function(){
               console.log('Closing socketid: ' + info.socketId);
-              // chrome.sockets.udp.getSockets(function(socketsInfo){
-              //   console.log("Inside getSockets");
-              //   if (!socketsInfo) return;
-              //     for (var i = 0; i < socketsInfo.length; i++) {
-              //       console.log(socketsInfo[i]);
-              //     }
-              // });
             });
           }
   }
