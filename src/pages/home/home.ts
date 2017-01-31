@@ -72,10 +72,7 @@ export class HomePage {
         bufView[i] = OPTIONS.charCodeAt(i);
       }
 
-    function receiveMsg(info){
-      console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-      console.log(info);
-    }  
+  
     chrome.sockets.udp.create(function(createInfo) {
       console.log('create log ' + createInfo.socketId);
       //console.log('create log ' + JSON.stringify(createInfo));
@@ -84,7 +81,11 @@ export class HomePage {
         
         chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
           console.log('send log ' + JSON.stringify(sendInfo));
-          chrome.sockets.udp.onReceive.addListener(receiveMsg);
+          //chrome.sockets.udp.onReceive.addListener(receiveMsg);
+          chrome.sockets.udp.onReceive.addListener(function(info){
+            console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
+            console.log(info);
+          });
           if (sendInfo.resultCode < 0) {
             console.log('send: fail: ' + sendInfo.resultCode);
             chrome.sockets.udp.close(createInfo.socketId);
