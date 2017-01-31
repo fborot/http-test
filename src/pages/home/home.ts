@@ -48,7 +48,7 @@ export class HomePage {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
   }
 
-  UDPSend(parent_this : HomePage, remoteIP : string, remotePort: number){
+  UDPSend(parent_this : any, remoteIP : string, remotePort: number){
     chrome.sockets.udp.create(function(createInfo) {
       console.log('Socket Id created ' + createInfo.socketId);
       let lPort : number = 45678;//-1;
@@ -58,7 +58,7 @@ export class HomePage {
       //   lPort = socketInfo.localPort;
       //   console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
       // });
-      parent_this.socket = createInfo.socketId;
+      this.socket = createInfo.socketId;
       chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, function(result) {
         console.log('Bind result: ' + result);    
         chrome.sockets.udp.onReceive.addListener(parent_this.UDPReceiveListener);   
@@ -92,6 +92,7 @@ export class HomePage {
   }
 
   UDPReceiveListener(info){
+    console.log('Inside UDPList: ' + this.socket);
     if (this.socket == info.socketId) {
       console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
       //let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
@@ -111,7 +112,6 @@ export class HomePage {
     let self = this;
 
     this.UDPSend(this,'72.13.65.18',PORT);
-
 
   }
 
