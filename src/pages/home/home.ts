@@ -73,13 +73,15 @@ export class HomePage {
       chrome.sockets.udp.bind(createInfo.socketId, '10.100.61.17', myport, function(result) {
         console.log('bind log ' + result);    
         chrome.sockets.udp.onReceive.addListener(function(info){
-          console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-          let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
-          console.log('Recv msg: ' + response);
-          console.log('socketId: ' + info.socketId);
-          chrome.sockets.udp.close(info.socketId,function(){
-            console.log('Closing socketid: ' + createInfo.socketId + ":" + info.socketId);
-          });
+          if (createInfo.socketId == info.socketId) {
+            console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
+            let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
+            console.log('Recv msg: ' + response);
+            console.log('socketId: ' + info.socketId);
+            chrome.sockets.udp.close(info.socketId,function(){
+              console.log('Closing socketid: ' + createInfo.socketId + ":" + info.socketId);
+            });
+          }
         });   
         chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
             console.log('send log ' + JSON.stringify(sendInfo));    
