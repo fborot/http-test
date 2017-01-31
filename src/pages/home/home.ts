@@ -58,7 +58,7 @@ export class HomePage {
       //   lPort = socketInfo.localPort;
       //   console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
       // });
-      this.socket = createInfo.socketId;
+      parent_this.socket = createInfo.socketId;
       chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, function(result) {
         console.log('Bind result: ' + result);    
         chrome.sockets.udp.onReceive.addListener(parent_this.UDPReceiveListener);   
@@ -92,7 +92,7 @@ export class HomePage {
   }
 
   UDPReceiveListener(info){
-    console.log('Inside UDPList: ' + this.socket);
+    console.log('Inside UDPList: ' + this.socket + ":" + info.socketId);
     if (this.socket == info.socketId) {
       console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
       //let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
