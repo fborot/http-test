@@ -51,13 +51,13 @@ export class HomePage {
   UDPSend(parent_this : any, remoteIP : string, remotePort: number){
     chrome.sockets.udp.create(function(createInfo) {
       console.log('Socket Id created ' + createInfo.socketId);
-      let lPort : number = -1;
-      let lIP : string = "";
-      chrome.sockets.udp.getInfo(createInfo.socketId,function(socketInfo){
-        lIP = socketInfo.localAddress;
-        lPort = socketInfo.localPort;
-        console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
-      });
+      let lPort : number = 45678;//-1;
+      let lIP : string = "10.100.61.17"; //"";
+      // chrome.sockets.udp.getInfo(createInfo.socketId,function(socketInfo){
+      //   lIP = socketInfo.localAddress;
+      //   lPort = socketInfo.localPort;
+      //   console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
+      // });
       parent_this.socket = createInfo.socketId;
       chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, function(result) {
         console.log('Bind result: ' + result);    
