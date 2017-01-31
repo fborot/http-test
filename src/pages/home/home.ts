@@ -59,7 +59,7 @@ export class HomePage {
       //   console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
       // });
       this.socket = createInfo.socketId;
-      console.log('After assinging socketid: ' + this.socket + ":" + createInfo.socketId);
+      console.log('After assigning socketid: ' + this.socket + ":" + createInfo.socketId);
       chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, (result) => {
         console.log('Bind result: ' + result);    
         chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);   
