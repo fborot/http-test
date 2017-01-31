@@ -22,19 +22,7 @@ export class HomePage {
     
   }
 
-  receiveF(info){
-    
-    console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-    //console.log(this.ab2str(info.data));
-    let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
-    console.log('Recv msg: ' + response);
-    console.log('socketId: ' + info.socketId);
-    chrome.sockets.udp.close(info.socketId);
-        
-  }
-  removeF(){
-    chrome.sockets.udp.onReceive.removeListener(this.receiveF);
-  }
+
   load(http){
     this.http.get('https://service1.auris.com/vclec/mobileapps/623789211A/Services.asp?transaction_type=565&product_id=10053&ani_number=3055886662&response_type=03').
     subscribe(data => {
@@ -84,7 +72,15 @@ export class HomePage {
       console.log('Socket Id created ' + createInfo.socketId);
       chrome.sockets.udp.bind(createInfo.socketId, '10.100.61.17', 41234, function(result) {
         console.log('bind log ' + result);    
-        chrome.sockets.udp.onReceive.addListener(this.receiveF);   
+        chrome.sockets.udp.onReceive.addListener(function(info){
+          console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
+          let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
+          console.log('Recv msg: ' + response);
+          console.log('socketId: ' + info.socketId);
+          chrome.sockets.udp.close(info.socketId,function(){
+            console.log('Closing socketid: ' + createInfo.socketId + ":" + info.socketId);
+          });
+        });   
         chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
             console.log('send log ' + JSON.stringify(sendInfo));    
           if (sendInfo.resultCode < 0) {
