@@ -48,7 +48,7 @@ export class HomePage {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
   }
 
-  UDPSend(parent_this : any, remoteIP : string, remotePort: number){
+  UDPSend(parent_this : HomePage, remoteIP : string, remotePort: number){
     chrome.sockets.udp.create(function(createInfo) {
       console.log('Socket Id created ' + createInfo.socketId);
       let lPort : number = 45678;//-1;
@@ -92,7 +92,7 @@ export class HomePage {
   }
 
   UDPReceiveListener(info){
-    //if (this.socket == info.socketId) {
+    if (this.socket == info.socketId) {
       console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
       //let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
       let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
@@ -101,7 +101,7 @@ export class HomePage {
       chrome.sockets.udp.close(info.socketId,function(){
         console.log('Closing socketid: ' + info.socketId);
       });
-    //}
+    }
   }
   
 
