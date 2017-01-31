@@ -60,7 +60,7 @@ export class HomePage {
     "User-Agent: IonicSIP UA\r\n\r\n";
 
   let PORT = 5060;
-
+  let self = this;
     var buf = new ArrayBuffer(OPTIONS.length); // 2 bytes for each char
       var bufView = new Uint8Array(buf);
       for (var i=0, strLen=OPTIONS.length; i < strLen; i++) {
@@ -75,7 +75,7 @@ export class HomePage {
         chrome.sockets.udp.onReceive.addListener(function(info){
           if (createInfo.socketId == info.socketId) {
             console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-            let response: string = this.ab2str.bind(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
+            let response: string = self.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
             console.log('Recv msg: ' + response);
             console.log('socketId: ' + info.socketId);
             chrome.sockets.udp.close(info.socketId,function(){
