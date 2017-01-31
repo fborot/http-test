@@ -15,11 +15,12 @@ export class HomePage {
   posts : any;
   Myhttp : Http;
   port : number;
+  socket : any;
 
   constructor(public navCtrl: NavController, public http: Http) {
     console.log("Constructor called");    
     this.Myhttp = http;
-    this.port = 40000;
+    this.socket = -1;
   }
 
 
@@ -47,54 +48,70 @@ export class HomePage {
     return String.fromCharCode.apply(null, new Uint8Array(buf));
   }
 
-  sendMsg(myport){
-    this.port++;
-    let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
-    "Via: SIP/2.0/UDP 10.100.61.17:"+ myport +";branch=z9hG4bK313a.3328fa72.0\r\n" + 
-    "To: sip:72.13.65.18:5060\r\n" +
-    "From: <sip:3055886662@10.100.61.17:"+ myport +">;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
-    "CSeq: 14 OPTIONS\r\n" +
-    "Call-ID: 4070cdfb649ada0d-10455@64.45.157.102\r\n" +
-    "Max-Forwards: 70\r\n" +
-    "Content-Length: 0\r\n" +
-    "User-Agent: IonicSIP UA\r\n\r\n";
-
-  let PORT = 5060;
-  let self = this;
-    var buf = new ArrayBuffer(OPTIONS.length); // 2 bytes for each char
-      var bufView = new Uint8Array(buf);
-      for (var i=0, strLen=OPTIONS.length; i < strLen; i++) {
-        bufView[i] = OPTIONS.charCodeAt(i);
-      }
-
-    console.log('Ports: ' + myport + ":" + this.port);
+  UDPSend(parent_this : any, remoteIP : string, remotePort: number){
     chrome.sockets.udp.create(function(createInfo) {
       console.log('Socket Id created ' + createInfo.socketId);
-      chrome.sockets.udp.bind(createInfo.socketId, '10.100.61.17', myport, function(result) {
-        console.log('bind log ' + result);    
-        chrome.sockets.udp.onReceive.addListener(function(info){
-          if (createInfo.socketId == info.socketId) {
-            console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-            let response: string = self.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
-            console.log('Recv msg: ' + response);
-            console.log('socketId: ' + info.socketId);
-            chrome.sockets.udp.close(info.socketId,function(){
-              console.log('Closing socketid: ' + createInfo.socketId + ":" + info.socketId);
-            });
-          }
-        });   
-        chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
-            console.log('send log ' + JSON.stringify(sendInfo));    
+      let lPort : number = -1;
+      let lIP : string = "";
+      chrome.sockets.udp.getInfo(createInfo.socketId,function(socketInfo){
+        lIP = socketInfo.localAddress;
+        lPort = socketInfo.localPort;
+        console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
+      });
+      parent_this.socket = createInfo.socketId;
+      chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, function(result) {
+        console.log('Bind result: ' + result);    
+        chrome.sockets.udp.onReceive.addListener(parent_this.UDPReceiveListener);   
+        let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
+          "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK313a.3328fa72.0\r\n" + 
+          "To: sip:72.13.65.18:5060\r\n" +
+          "From: <sip:3055886662@" +  lIP + ":" + lPort +">;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
+          "CSeq: 14 OPTIONS\r\n" +
+          "Call-ID: 4070cdfb649ada0d-10455@64.45.157.102\r\n" +
+          "Max-Forwards: 70\r\n" +
+          "Content-Length: 0\r\n" +
+          "User-Agent: IonicSIP UA\r\n\r\n";
+
+        var buf = new ArrayBuffer(OPTIONS.length);
+        var bufView = new Uint8Array(buf);
+        for (var i=0, strLen=OPTIONS.length; i < strLen; i++) {
+            bufView[i] = OPTIONS.charCodeAt(i);
+        }
+        chrome.sockets.udp.send(createInfo.socketId, buf, remoteIP, remotePort, function(sendInfo) {
+            console.log('Inside Send: ' + JSON.stringify(sendInfo));    
           if (sendInfo.resultCode < 0) {
-            console.log('send: fail: ' + sendInfo.resultCode);
+            console.log('Send: fail: ' + sendInfo.resultCode);
             chrome.sockets.udp.close(createInfo.socketId);
           } else {
-            console.log('send: success ' + sendInfo.resultCode);
-            //chrome.sockets.udp.close(createInfo.socketId);
+            console.log('Send: success ' + sendInfo.resultCode);
           }
         });
       });
     });
+
+  }
+
+  UDPReceiveListener(info){
+    if (this.socket == info.socketId) {
+      console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
+      let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
+      console.log('Recv msg: ' + response);
+      console.log('socketId: ' + info.socketId);
+      chrome.sockets.udp.close(info.socketId,function(){
+        console.log('Closing socketid: ' + info.socketId);
+      });
+    }
+  }
+  
+
+  sendMsg(){
+
+    let PORT = 5060;
+    let self = this;
+
+    this.UDPSend(this,'72.13.65.18',PORT);
+
+
   }
 
 }
