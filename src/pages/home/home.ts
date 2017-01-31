@@ -76,7 +76,7 @@ export class HomePage {
     chrome.sockets.udp.create(function(createInfo) {
       console.log('create log ' + createInfo.socketId);
       chrome.sockets.udp.bind(createInfo.socketId, '10.100.61.17', 41234, function(result) {
-        //console.log('bind log ' + result);        
+        console.log('bind log ' + result);        
         chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
             console.log('send log ' + JSON.stringify(sendInfo));
             chrome.sockets.udp.onReceive.addListener(function(info){
