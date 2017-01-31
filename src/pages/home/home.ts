@@ -75,6 +75,7 @@ export class HomePage {
             chrome.sockets.udp.close(createInfo.socketId,function(){
               console.log('Closing socketid: ' + createInfo.socketId);
               chrome.sockets.udp.getSockets(function(socketsInfo){
+                console.log("Inside getSockets");
                 if (!socketsInfo) return;
                   for (var i = 0; i < socketsInfo.length; i++) {
                     console.log(socketsInfo[i]);
