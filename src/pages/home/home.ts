@@ -49,7 +49,7 @@ export class HomePage {
   }
 
   UDPSend = (remoteIP : string, remotePort: number) => {
-    chrome.sockets.udp.create(function(createInfo) {
+    chrome.sockets.udp.create((createInfo) => {
       console.log('Socket Id created ' + createInfo.socketId);
       let lPort : number = 45678;//-1;
       let lIP : string = "10.100.61.17"; //"";
@@ -60,7 +60,7 @@ export class HomePage {
       // });
       this.socket = createInfo.socketId;
       console.log('After assinging socketid: ' + this.socket + ":" + createInfo.socketId);
-      chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, function(result) {
+      chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, (result) => {
         console.log('Bind result: ' + result);    
         chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);   
         let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
@@ -78,7 +78,7 @@ export class HomePage {
         for (var i=0, strLen=OPTIONS.length; i < strLen; i++) {
             bufView[i] = OPTIONS.charCodeAt(i);
         }
-        chrome.sockets.udp.send(createInfo.socketId, buf, remoteIP, remotePort, function(sendInfo) {
+        chrome.sockets.udp.send(createInfo.socketId, buf, remoteIP, remotePort, (sendInfo) => {
             console.log('Inside Send: ' + JSON.stringify(sendInfo));    
           if (sendInfo.resultCode < 0) {
             console.log('Send: fail: ' + sendInfo.resultCode);
@@ -100,7 +100,7 @@ export class HomePage {
       let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
       console.log('Recv msg: ' + response);
       console.log('socketId: ' + info.socketId);
-      chrome.sockets.udp.close(info.socketId,function(){
+      chrome.sockets.udp.close(info.socketId,() => {
         console.log('Closing socketid: ' + info.socketId);
       });
     }
