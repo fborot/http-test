@@ -62,7 +62,7 @@ export class HomePage {
       console.log('After assigning socketid: ' + this.socket + ":" + createInfo.socketId);
       chrome.sockets.udp.bind(createInfo.socketId, lIP, lPort, (result) => {
         console.log('Bind result: ' + result);    
-        chrome.sockets.udp.onReceive.addListener(function(info) {
+        chrome.sockets.udp.onReceive.addListener((info) => {
           console.log('Inside UDPList: ' + this.socket + ":" + info.socketId);
           if (this.socket == info.socketId) {
             console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
@@ -123,8 +123,6 @@ export class HomePage {
   sendMsg(){
 
     let PORT = 5060;
-    let self = this;
-
     this.UDPSend('72.13.65.18',PORT);
 
   }
