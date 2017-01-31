@@ -77,13 +77,13 @@ export class HomePage {
       console.log('create log ' + JSON.stringify(createInfo));
       //chrome.sockets.udp.bind(createInfo.socketId, '0.0.0.0', 0, function(result) {
         //console.log('bind log ' + result);
-        chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(result) {
-          console.log('create log ' + JSON.stringify(result));
-          if (result < 0) {
-            console.log('send fail: ' + result);
+        chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
+          console.log('create log ' + JSON.stringify(sendInfo));
+          if (sendInfo.resultCode < 0) {
+            console.log('send fail: ' + sendInfo.resultCode);
             chrome.sockets.udp.close(createInfo.socketId);
           } else {
-            console.log('sendTo: success ' + PORT);
+            console.log('sendTo: success ' + sendInfo.resultCode);
             chrome.sockets.udp.close(createInfo.socketId);
           }
         });
