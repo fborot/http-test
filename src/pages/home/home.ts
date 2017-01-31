@@ -51,6 +51,9 @@ export class HomePage {
   //   return buf;
   // }
 
+  ab2str(buf){
+    return String.fromCharCode.apply(null, new Uint8Array(buf));
+  }
 
   sendMsg(){
 
@@ -79,7 +82,7 @@ export class HomePage {
         console.log('bind log ' + result);    
         chrome.sockets.udp.onReceive.addListener(function(info){
           console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-          console.log(info.data.ToString());
+          console.log(this.ab2str(info.data));
           chrome.sockets.udp.close(createInfo.socketId);
         });   
         chrome.sockets.udp.send(createInfo.socketId, buf, "72.13.65.18", PORT, function(sendInfo) {
