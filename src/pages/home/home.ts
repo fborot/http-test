@@ -123,7 +123,7 @@ export class HomePage {
             console.log('Recv msg: ' + response);
             console.log('socketId: ' + info.socketId);
             
-            chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
+            chrome.sockets.udp.onReceive.removeListener(this.UDPReceiveListener);
 
             chrome.sockets.udp.close(info.socketId,function(){
               console.log('Closing socketid: ' + info.socketId);
