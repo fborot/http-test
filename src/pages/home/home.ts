@@ -258,7 +258,6 @@ export class HomePage {
 
   UDPReceiveListener = (info) => {
           console.log('Inside UDPListener: ' + this.socket + ":" + info.socketId);
-          //if (this.socket == info.socketId) {
             console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
             let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
             let firstWord : string =  response.substr(0,3);
@@ -290,16 +289,16 @@ export class HomePage {
               this.SendResponse(requestMethod,response);
             }
             
-
             chrome.sockets.udp.onReceive.removeListener(this.UDPReceiveListener);
             chrome.sockets.udp.close(info.socketId,function(){
               console.log('Closing socketid: ' + info.socketId);
-            });
-          //}
+              this.connected = false;
+              console.log('Setting connected flag to false.');
+            });         
   }
 
   startCall(){
-
+    this.connected = false;
     let PORT = 5060;
     this.UDPSend('72.13.65.18',PORT);
 
