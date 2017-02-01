@@ -125,6 +125,7 @@ export class HomePage {
           "a=ptime:20\r\n" +
           "a=sendrecv\r\n\r\n"; 
 
+        console.log("Msg to be sent: " + OPTIONS);
         var buf = new ArrayBuffer(OPTIONS.length);
         var bufView = new Uint8Array(buf);
         for (var i=0, strLen=OPTIONS.length; i < strLen; i++) {
