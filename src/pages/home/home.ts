@@ -97,7 +97,7 @@ export class HomePage {
           "User-Agent: IonicSIP UA\r\n\r\n";
 
         let OPTIONS : string = "INVITE sip:30303055886662@72.13.65.18 SIP/2.0\r\n" +
-          "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK399ac27d\r\n"
+          "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK399ac27d\r\n" +
           "Max-Forwards: 70\r\n" +
           "From: <sip:7864723569@" +  lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
           "To: <sip:30303055886662@72.13.65.18>\r\n" +
