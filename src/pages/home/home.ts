@@ -163,20 +163,19 @@ export class HomePage {
     if (ackType < 0){
       console.log('Inside SendACK. Preparing ACK for a Rejected Request.');
       lviaBranch = "z9hG4bKqwerty.0";
-
+      RURI = "430301305444@72.13.65.66";
     } else {
       console.log('Inside SendACK. Preparing ACK for an Accepted Request.');
       lviaBranch = "z9hG4bK250f721e"
+      let index1 : number = msg.indexOf("Contact: <sip:") + 14;
+      let index2 : number = msg.indexOf(">\r\n",index1);
+      RURI = msg.substr(index1, index2 - index1);      
     }
+
     let index1 : number = msg.indexOf("Call-ID: ") + 9;
     let index2 : number = msg.indexOf("\r\n",index1);
     callID = msg.substr(index1, index2 - index1);
     
-    index1 = index2 = 0;
-    index1 = msg.indexOf("Contact: <sip:") + 14;
-    index2 = msg.indexOf(">\r\n",index1);
-    RURI = msg.substr(index1, index2 - index1);
-
     index1 = index2 = 0;
     index1 = msg.indexOf("To:");
     index2 = msg.indexOf(";tag=",index1) + 5;
