@@ -145,7 +145,7 @@ export class HomePage {
 
   }
 
-  SendACK(ackType : number){
+  SendACK(ackType : number, msg : string){
     //local vars for now
     let lPort : number = 45678;//-1;
     let lIP : string = "10.100.61.17"; //"";
@@ -155,17 +155,33 @@ export class HomePage {
 
     } else {
       console.log('Inside SendACK. Preparing ACK for an Accepted Request.');
-      let positiveACK = "ACK sip:430303055886662@204.9.238.168:5060 SIP/2.0\r\n" +
+
+      let index1 : number = msg.indexOf("Call-ID: ") + 10;
+      let index2 : number = msg.indexOf("\r\n",index1);
+      let callID : string = msg.substr(index1, index2 - index1);
+      
+      index1 = index2 = 0;
+      index1 = msg.indexOf("Contact: <sip:") + 16;
+      index2 = msg.indexOf(">\r\n",index1);
+      let RURI : string = msg.substr(index1, index2 - index1);
+
+      index1 = index2 = 0;
+      index1 = msg.indexOf("To:");
+      index2 = msg.indexOf(";tag=",index1) + 6;
+      let index3 : number = msg.indexOf("\r\n",index2);
+      let toTag : string = msg.substr(index2, index3 - index2);
+      
+      let positiveACK = "ACK sip:" + RURI + " SIP/2.0\r\n" +
         "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK250f721e\r\n" +
         "Route: <sip:204.9.238.50;lr>\r\n" +
         "Max-Forwards: 70\r\n" +
-        "From: <sip:7864723569@" + lIP + ":" + lPort +">;tag=as4dbc0e87\r\n" +
+        "From: <sip:7864723569@" + lIP + ":" + lPort +">;tag=" + toTag +"\r\n" +
         "To: <sip:30303055886662@204.9.238.50>;tag=as72bc3aca\r\n" +
         "Contact: <sip:7864723569@" + lIP + ":" + lPort +">\r\n" +
-        "Call-ID: 5ec494564255f484094160744f4e9e5e@" + lIP + ":" + lPort +"\r\n" +
+        "Call-ID: " + callID + "\r\n" +
         "CSeq: 102 ACK\r\n" +
         "User-Agent: FPBX-2.8.1(11.11.0)\r\n" +
-        "Content-Length: 0\r\n\n";
+        "Content-Length: 0\r\n\r\n";
 
         console.log("Msg to be sent: " + positiveACK);
         var buf = new ArrayBuffer(positiveACK.length);
@@ -200,11 +216,11 @@ export class HomePage {
                 return;
               } else if (respCode == 200){
                 console.log('Call is accepted, sending ACK');
-                this.SendACK(1);
+                this.SendACK(1, response);
                 return;
               } else {
                 console.log('Call is rejected, sending ACK');
-                this.SendACK(-1);                
+                this.SendACK(-1, response);                
               }
             } else {
               console.log("Recv msg is a Request, replying");
