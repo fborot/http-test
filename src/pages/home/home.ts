@@ -163,7 +163,7 @@ export class HomePage {
     if (ackType < 0){
       console.log('Inside SendACK. Preparing ACK for a Rejected Request.');
       lviaBranch = "z9hG4bKqwerty.0";
-      RURI = "430301305444@72.13.65.66";
+      RURI = "430307864723569@72.13.65.66";
     } else {
       console.log('Inside SendACK. Preparing ACK for an Accepted Request.');
       lviaBranch = "z9hG4bK250f721e"
