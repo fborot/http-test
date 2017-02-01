@@ -232,7 +232,7 @@ export class HomePage {
   
     console.log('Inside SendBYE. Preparing ACK for an Accepted Request.');
    
-    let BYE = "BYE sip:430307864723569@72.13.65.70:5060 SIP/2.0\r\n" +
+    let BYE = "BYE sip:430307864723569@72.13.65.66:5060 SIP/2.0\r\n" +
       "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK1234abcd\r\n" +
       "Route: <sip:72.13.65.18;lr>\r\n" +
       "Max-Forwards: 70\r\n" +
