@@ -253,7 +253,7 @@ export class HomePage {
               console.log("Recv msg is a Request, replying");
               let index : number = response.indexOf(" ") - 1; 
               let requestMethod = response.substr(0, index);
-              this.SendResponse(requestMethod);
+              this.SendResponse(requestMethod,response);
             }
             
 
