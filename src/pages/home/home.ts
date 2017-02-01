@@ -16,11 +16,13 @@ export class HomePage {
   Myhttp : Http;
   port : number;
   socket : any;
+  connected : boolean;
 
   constructor(public navCtrl: NavController, public http: Http) {
     console.log("Constructor called");    
     this.Myhttp = http;
     this.socket = -1;
+    this.connected = false;
   }
 
 
@@ -98,7 +100,7 @@ export class HomePage {
 
         chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
 
-        let OPTIONS : string = "INVITE sip:30307864723569@72.13.65.18 SIP/2.0\r\n" +
+        let INVITE : string = "INVITE sip:30307864723569@72.13.65.18 SIP/2.0\r\n" +
           "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK399ac27d\r\n" +
           "Max-Forwards: 70\r\n" +
           "From: <sip:3055886662@" +  lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
@@ -106,7 +108,7 @@ export class HomePage {
           "Contact: <sip:3055886662@" +  lIP + ":" + lPort +">\r\n" +
           "Call-ID: 290997367d34cda94f9da5952f20ae12@" +  lIP + ":" + lPort +"\r\n" +
           "CSeq: 102 INVITE\r\n" +
-          "User-Agent: FPBX-2.8.1(11.11.0)\r\n" +
+          "User-Agent: IonicSIP UA\r\n\r\n" +
           "Date: Wed, 01 Feb 2017 14:09:52 GMT\r\n" +
           "Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY, INFO, PUBLISH, MESSAGE\r\n" +
           "Supported: replaces, timer\r\n" +
@@ -127,11 +129,11 @@ export class HomePage {
           "a=ptime:20\r\n" +
           "a=sendrecv\r\n\r\n"; 
 
-        console.log("Msg to be sent: " + OPTIONS);
-        var buf = new ArrayBuffer(OPTIONS.length);
+        console.log("Msg to be sent: " + INVITE);
+        var buf = new ArrayBuffer(INVITE.length);
         var bufView = new Uint8Array(buf);
-        for (var i=0, strLen=OPTIONS.length; i < strLen; i++) {
-            bufView[i] = OPTIONS.charCodeAt(i);
+        for (var i=0, strLen=INVITE.length; i < strLen; i++) {
+            bufView[i] = INVITE.charCodeAt(i);
         }
         chrome.sockets.udp.send(createInfo.socketId, buf, remoteIP, remotePort, (sendInfo) => {
             console.log('Inside Send: ' + JSON.stringify(sendInfo));    
@@ -182,7 +184,7 @@ export class HomePage {
         "Contact: <sip:3055886662@" + lIP + ":" + lPort +">\r\n" +
         "Call-ID: " + callID + "\r\n" +
         "CSeq: 102 ACK\r\n" +
-        "User-Agent: FPBX-2.8.1(11.11.0)\r\n" +
+        "User-Agent: IonicSIP UA\r\n\r\n" +
         "Content-Length: 0\r\n\r\n";
 
         console.log("Msg to be sent: " + positiveACK);
@@ -194,6 +196,7 @@ export class HomePage {
         chrome.sockets.udp.send(this.socket, buf, '72.13.65.18', 5060, (sendInfo) => {
             console.log('Sending ACK: ' + JSON.stringify(sendInfo));   
             console.log('Sending ACK: result ' + sendInfo.resultCode);
+            this.connected = true;
         });
     }
   }
@@ -222,6 +225,37 @@ export class HomePage {
     }
   }
 
+  SendBYE(){
+    //local vars for now
+    let lPort : number = 45678;//-1;
+    let lIP : string = "10.100.61.17"; //"";
+  
+    console.log('Inside SendBYE. Preparing ACK for an Accepted Request.');
+   
+    let BYE = "BYE sip:430307864723569@72.13.65.70:5060 SIP/2.0\r\n" +
+      "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK1234abcd\r\n" +
+      "Route: <sip:72.13.65.18;lr>\r\n" +
+      "Max-Forwards: 70\r\n" +
+      "From: <sip:7864723569@" + lIP + ":" + lPort +">;tag=as0d69e2eb\r\n" +
+      "To: <sip:30303055886662@72.13.65.18>;tag=as041bed04\r\n" +
+      "Call-ID: 290997367d34cda94f9da5952f20ae12@" +  lIP + ":" + lPort +"\r\n" +
+      "CSeq: 103 BYE\r\n" +
+      "User-Agent: IonicSIP UA\r\n\r\n" +
+      "Content-Length: 0\r\n\r\n";
+
+      console.log("Msg to be sent: " + BYE);
+      var buf = new ArrayBuffer(BYE.length);
+      var bufView = new Uint8Array(buf);
+      for (var i=0, strLen=BYE.length; i < strLen; i++) {
+          bufView[i] = BYE.charCodeAt(i);
+      }
+      chrome.sockets.udp.send(this.socket, buf, '72.13.65.18', 5060, (sendInfo) => {
+          console.log('Sending BYE: ' + JSON.stringify(sendInfo));   
+          console.log('Sending BYE: result ' + sendInfo.resultCode);
+      });
+    
+  }
+
   UDPReceiveListener = (info) => {
           console.log('Inside UDPListener: ' + this.socket + ":" + info.socketId);
           //if (this.socket == info.socketId) {
@@ -237,9 +271,12 @@ export class HomePage {
                 console.log('Recv temp message');
                 return;
               } else if (respCode == 200){
-                console.log('Call is accepted, sending ACK');
-                this.SendACK(1, response);
-                return;
+                if (!this.connected){
+                  console.log('Call is accepted, sending ACK');
+                  this.SendACK(1, response);
+                } else {
+                  console.log('Call is terminated');
+                }
               } else {
                 console.log('Call is rejected, sending ACK');
                 this.SendACK(-1, response);                
@@ -265,6 +302,10 @@ export class HomePage {
     let PORT = 5060;
     this.UDPSend('72.13.65.18',PORT);
 
+  }
+
+  hangupCall(){
+    this.SendBYE();
   }
 
 }
