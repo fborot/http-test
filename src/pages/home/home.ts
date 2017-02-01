@@ -196,24 +196,21 @@ export class HomePage {
     }
   }
 
-  SendResponse(resquestTpe : string, msg : string){
+  SendResponse(requestMethod : string, msg : string){
 
-    let index1 : number = msg.indexOf("Call-ID: ") + 9;
-    let index2 : number = msg.indexOf("\r\n",index1);
-    let callID : string = msg.substr(index1, index2 - index1);
+    // let index1 : number = msg.indexOf("Call-ID: ") + 9;
+    // let index2 : number = msg.indexOf("\r\n",index1);
+    // let callID : string = msg.substr(index1, index2 - index1);
+    let reply : string = "SIP/2.0 200 OK\r\n";
 
-    let reply = "SIP/2.0 200 OK\r\n" +
-      "Via: SIP/2.0/UDP 204.9.238.50;branch=z9hG4bKf3ad.d3e7f4d529a39f1aec4c41ef669f1acd.0;received=204.9.238.50\r\n" +
-      "Via: SIP/2.0/UDP 204.9.238.168:5060;branch=z9hG4bK7b37a06a\r\n" +
-      "From: <sip:30307864723569@72.13.65.18>;tag=as72bc3aca\r\n" +
-      "To: <sip:3055886662@204.9.239.200>;tag=as4dbc0e87\r\n" +
-      "Call-ID: " + callID + "\r\n" +
-      "CSeq: 102 BYE\r\n" +
-      "Server: FPBX-2.8.1(11.11.0)\r\n" +
-      "Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY, INFO, PUBLISH, MESSAGE\r\n" +
-      "Supported: replaces, timer\r\n" +
-      "Content-Length: 0\r\n\r\n";
-
+    if (requestMethod== "BYE"){
+      let index1 : number = msg.indexOf("\r\n") + 1;
+      let index2 : number = msg.indexOf("User-Agent",index1);
+      let part1 : string = msg.substr(index1,index2 - index1);
+      reply += part1;
+      reply += "Supported: replaces, timer\r\n" +
+                "Content-Length: 0\r\n\r\n";
+    
       console.log("Msg to be sent: " + reply);
       var buf = new ArrayBuffer(reply.length);
       var bufView = new Uint8Array(buf);
@@ -224,7 +221,7 @@ export class HomePage {
           console.log('Sending Reply: ' + JSON.stringify(sendInfo));   
           console.log('Sending Reply: result ' + sendInfo.resultCode);
       });
-
+    }
   }
 
   UDPReceiveListener = (info) => {
