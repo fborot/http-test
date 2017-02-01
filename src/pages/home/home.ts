@@ -173,7 +173,7 @@ export class HomePage {
       
       let positiveACK = "ACK sip:" + RURI + " SIP/2.0\r\n" +
         "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK250f721e\r\n" +
-        "Route: <sip:204.9.238.50;lr>\r\n" +
+        "Route: <sip:72.13.65.18;lr>\r\n" +
         "Max-Forwards: 70\r\n" +
         "From: <sip:3055886662@" + lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
         "To: <sip:30307864723569@72.13.65.18>;tag=" + toTag +"\r\n" +
@@ -198,12 +198,8 @@ export class HomePage {
 
   SendResponse(requestMethod : string, msg : string){
 
-    // let index1 : number = msg.indexOf("Call-ID: ") + 9;
-    // let index2 : number = msg.indexOf("\r\n",index1);
-    // let callID : string = msg.substr(index1, index2 - index1);
     let reply : string = "SIP/2.0 200 OK\r\n";
-
-    if (requestMethod== "BYE"){
+    if (requestMethod == "BYE"){
       let index1 : number = msg.indexOf("\r\n") + 1;
       let index2 : number = msg.indexOf("User-Agent",index1);
       let part1 : string = msg.substr(index1,index2 - index1);
@@ -248,8 +244,9 @@ export class HomePage {
               }
             } else {
               console.log("Recv msg is a Request, replying");
-              let index : number = response.indexOf(" ") - 1; 
+              let index : number = response.indexOf(" "); 
               let requestMethod = response.substr(0, index);
+              console.log("Recv msg is a Request: " + requestMethod);
               this.SendResponse(requestMethod,response);
             }
             
