@@ -86,7 +86,7 @@ export class HomePage {
         //   }
         // });   
         chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
-        let OPTIONS2 : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
+        let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
           "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK313a.3328fa72.0\r\n" + 
           "To: sip:72.13.65.18:5060\r\n" +
           "From: <sip:3055886662@" +  lIP + ":" + lPort +">;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
@@ -96,11 +96,11 @@ export class HomePage {
           "Content-Length: 0\r\n" +
           "User-Agent: IonicSIP UA\r\n\r\n";
 
-        let OPTIONS : string = "INVITE sip:30303055886662@204.9.238.50 SIP/2.0"
+        let OPTIONS2 : string = "INVITE sip:30303055886662@72.13.65.18 SIP/2.0"
           "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK399ac27d\r\n"
           "Max-Forwards: 70\r\n" +
           "From: <sip:7864723569@" +  lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
-          "To: <sip:30303055886662@204.9.238.50>\r\n" +
+          "To: <sip:30303055886662@72.13.65.18>\r\n" +
           "Contact: <sip:7864723569@" +  lIP + ":" + lPort +">\r\n" +
           "Call-ID: 290997367d34cda94f9da5952f20ae12@" +  lIP + ":" + lPort +"\r\n" +
           "CSeq: 102 INVITE\r\n" +
