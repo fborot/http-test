@@ -63,7 +63,7 @@ export class HomePage {
       chrome.sockets.udp.bind(createInfo.socketId, lIP, 45678, (result) => {
         console.log('Bind result: ' + result);
         console.log('new value: ' + createInfo.socketId);    
-        chrome.sockets.udp.getInfo(createInfo.socketId,function(socketInfo){
+        chrome.sockets.udp.getInfo(createInfo.socketId, (socketInfo) => {
           lIP = socketInfo.localAddress;
           lPort = socketInfo.localPort;
           console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
@@ -116,7 +116,7 @@ export class HomePage {
           });//socket send
 
           });
-          
+
       });//socket bind
     });//socket create
 
