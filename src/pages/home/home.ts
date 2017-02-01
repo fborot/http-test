@@ -110,7 +110,7 @@ export class HomePage {
           "Contact: <sip:3055886662@" +  lIP + ":" + lPort +">\r\n" +
           "Call-ID: 290997367d34cda94f9da5952f20ae12@" +  lIP + ":" + lPort +"\r\n" +
           "CSeq: 102 INVITE\r\n" +
-          "User-Agent: IonicSIP UA\r\n\r\n" +
+          "User-Agent: IonicSIP UA\r\n" +
           "Date: Wed, 01 Feb 2017 14:09:52 GMT\r\n" +
           "Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY, INFO, PUBLISH, MESSAGE\r\n" +
           "Supported: replaces, timer\r\n" +
