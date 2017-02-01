@@ -271,12 +271,13 @@ export class HomePage {
                 console.log('Recv temp message');
                 return;
               } else if (respCode == 200){
-                if (!this.connected){
-                  console.log('Call is accepted, sending ACK');
-                  this.SendACK(1, response);
-                } else {
-                  console.log('Call is terminated');
-                }
+                  if (!this.connected){
+                    console.log('Call is accepted, sending ACK');
+                    this.SendACK(1, response);
+                    return;
+                  } else {
+                    console.log('Call is terminated');
+                  }
               } else {
                 console.log('Call is rejected, sending ACK');
                 this.SendACK(-1, response);                
