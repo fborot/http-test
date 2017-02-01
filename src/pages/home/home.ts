@@ -60,7 +60,7 @@ export class HomePage {
 
       this.socket = createInfo.socketId;
       console.log('After assigning socketid: ' + this.socket + ":" + createInfo.socketId);
-      chrome.sockets.udp.bind(createInfo.socketId, lIP, 45678, (result) => {
+      chrome.sockets.udp.bind(createInfo.socketId, "0.0.0.0", 0, (result) => {
         console.log('Bind result: ' + result);
         console.log('new value: ' + createInfo.socketId);    
         chrome.sockets.udp.getInfo(createInfo.socketId, (socketInfo) => {
