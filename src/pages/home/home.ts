@@ -240,7 +240,7 @@ export class HomePage {
       "To: <sip:30303055886662@72.13.65.18>;tag=as041bed04\r\n" +
       "Call-ID: 290997367d34cda94f9da5952f20ae12@" +  lIP + ":" + lPort +"\r\n" +
       "CSeq: 103 BYE\r\n" +
-      "User-Agent: IonicSIP UA\r\n\r\n" +
+      "User-Agent: IonicSIP UA\r\n" +
       "Content-Length: 0\r\n\r\n";
 
       console.log("Msg to be sent: " + BYE);
