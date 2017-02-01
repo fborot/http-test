@@ -166,7 +166,7 @@ export class HomePage {
 
     } else {
       console.log('Inside SendACK. Preparing ACK for an Accepted Request.');
-      lviaBranch = "z9hG4bK250f721e;"
+      lviaBranch = "z9hG4bK250f721e"
 
       let index1 : number = msg.indexOf("Call-ID: ") + 9;
       let index2 : number = msg.indexOf("\r\n",index1);
