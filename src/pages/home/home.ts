@@ -145,20 +145,80 @@ export class HomePage {
 
   }
 
+  SendACK(ackType : number){
+    //local vars for now
+    let lPort : number = 45678;//-1;
+    let lIP : string = "10.100.61.17"; //"";
+    
+    if (ackType < 0){
+      console.log('Inside SendACK. Preparing ACK for a Rejected Request.');
+
+    } else {
+      console.log('Inside SendACK. Preparing ACK for an Accepted Request.');
+      let positiveACK = "ACK sip:430303055886662@204.9.238.168:5060 SIP/2.0\r\n" +
+        "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK250f721e\r\n" +
+        "Route: <sip:204.9.238.50;lr>\r\n" +
+        "Max-Forwards: 70\r\n" +
+        "From: <sip:7864723569@" + lIP + ":" + lPort +">;tag=as4dbc0e87\r\n" +
+        "To: <sip:30303055886662@204.9.238.50>;tag=as72bc3aca\r\n" +
+        "Contact: <sip:7864723569@" + lIP + ":" + lPort +">\r\n" +
+        "Call-ID: 5ec494564255f484094160744f4e9e5e@" + lIP + ":" + lPort +"\r\n" +
+        "CSeq: 102 ACK\r\n" +
+        "User-Agent: FPBX-2.8.1(11.11.0)\r\n" +
+        "Content-Length: 0\r\n\n";
+
+        console.log("Msg to be sent: " + positiveACK);
+        var buf = new ArrayBuffer(positiveACK.length);
+        var bufView = new Uint8Array(buf);
+        for (var i=0, strLen=positiveACK.length; i < strLen; i++) {
+            bufView[i] = positiveACK.charCodeAt(i);
+        }
+        chrome.sockets.udp.send(this.socket, buf, '72.13.65.18', 5060, (sendInfo) => {
+            console.log('Sending ACK: ' + JSON.stringify(sendInfo));   
+            console.log('Sending ACK: result ' + sendInfo.resultCode);
+        });
+    }
+  }
+
+  SendResponse(resquestTpe : string){
+
+  }
+
   UDPReceiveListener = (info) => {
-          console.log('Inside UDPList: ' + this.socket + ":" + info.socketId);
-          if (this.socket == info.socketId) {
+          console.log('Inside UDPListener: ' + this.socket + ":" + info.socketId);
+          //if (this.socket == info.socketId) {
             console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
             let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
-            //let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
-            console.log('Recv msg: ' + response);
-            console.log('socketId: ' + info.socketId);
+            let firstWord : string =  response.substr(0,3);
+            if (firstWord == "SIP") {
+              console.log("Recv msg is a Response");
+              let responseCode = response.substr(8,3);
+              let respCode = Number(responseCode);
+              console.log('Recv msg: ' + responseCode);
+              if (respCode < 200){
+                console.log('Recv temp message');
+                return;
+              } else if (respCode == 200){
+                console.log('Call is accepted, sending ACK');
+                this.SendACK(1);
+                return;
+              } else {
+                console.log('Call is rejected, sending ACK');
+                this.SendACK(-1);                
+              }
+            } else {
+              console.log("Recv msg is a Request, replying");
+              let index : number = response.indexOf(" ") - 1; 
+              let requestMethod = response.substr(0, index);
+              this.SendResponse(requestMethod);
+            }
             
+
             chrome.sockets.udp.onReceive.removeListener(this.UDPReceiveListener);
             chrome.sockets.udp.close(info.socketId,function(){
               console.log('Closing socketid: ' + info.socketId);
             });
-          }
+          //}
   }
 
   sendMsg(){
