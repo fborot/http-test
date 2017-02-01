@@ -200,7 +200,7 @@ export class HomePage {
 
     let reply : string = "SIP/2.0 200 OK\r\n";
     if (requestMethod == "BYE"){
-      let index1 : number = msg.indexOf("\r\n") + 1;
+      let index1 : number = msg.indexOf("\r\n") + 2;
       let index2 : number = msg.indexOf("User-Agent",index1);
       let part1 : string = msg.substr(index1,index2 - index1);
       reply += part1;
