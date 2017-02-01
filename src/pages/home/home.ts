@@ -151,7 +151,7 @@ export class HomePage {
 
   }
 
-  SendACK(ackType : number, msg : string){
+  SendACK = (ackType : number, msg : string) => {
     //local vars for now
     let lPort : number = 45678;//-1;
     let lIP : string = "10.100.61.17"; //"";
