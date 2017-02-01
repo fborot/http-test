@@ -67,89 +67,60 @@ export class HomePage {
           lIP = socketInfo.localAddress;
           lPort = socketInfo.localPort;
           console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
-        });
 
-        // chrome.sockets.udp.onReceive.addListener((info) => {
-        //   console.log('Inside UDPList: ' + this.socket + ":" + info.socketId + ":" + createInfo.socketId);
-        //   if (createInfo.socketId == info.socketId) {
-        //     console.log('Recv from socket: ' + info.remoteAddress + ":" + info.remotePort);
-        //     //let response: string = this.ab2str(info.data);// String.fromCharCode.apply(null, new Uint8Array(info.data));
-        //     let response: string = String.fromCharCode.apply(null, new Uint8Array(info.data));
-        //     console.log('Recv msg: ' + response);
-        //     console.log('socketId: ' + info.socketId);
-        //     chrome.sockets.udp.close(createInfo.socketId,function(){
-        //       console.log('Closing socketid: ' + createInfo.socketId);
-        //       chrome.sockets.udp.getSockets(function(socketsInfo){
-        //         console.log("Inside getSockets");
-        //         if (!socketsInfo) return;
-        //           for (var i = 0; i < socketsInfo.length; i++) {
-        //             console.log(socketsInfo[i]);
-        //           }
-        //       })
-        //     });
-        //   }
-        // });   
+          chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
 
-        // let OPTIONS2 : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
-        //   "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK313a.3328fa72.0\r\n" + 
-        //   "To: sip:72.13.65.18:5060\r\n" +
-        //   "From: <sip:3055886662@" +  lIP + ":" + lPort +">;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
-        //   "CSeq: 14 OPTIONS\r\n" +
-        //   "Call-ID: 4070cdfb649ada0d-10455@64.45.157.102\r\n" +
-        //   "Max-Forwards: 70\r\n" +
-        //   "Content-Length: 0\r\n" +
-        //   "User-Agent: IonicSIP UA\r\n\r\n";
+          let INVITE : string = "INVITE sip:30307864723569@72.13.65.18 SIP/2.0\r\n" +
+            "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK399ac27d\r\n" +
+            "Max-Forwards: 70\r\n" +
+            "From: <sip:3055886662@" +  lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
+            "To: <sip:30307864723569@72.13.65.18>\r\n" +
+            "Contact: <sip:3055886662@" +  lIP + ":" + lPort +">\r\n" +
+            "Call-ID: 290997367d34cda94f9da5952f20ae12@" +  lIP + ":" + lPort +"\r\n" +
+            "CSeq: 102 INVITE\r\n" +
+            "User-Agent: IonicSIP UA\r\n" +
+            "Date: Wed, 01 Feb 2017 14:09:52 GMT\r\n" +
+            "Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY, INFO, PUBLISH, MESSAGE\r\n" +
+            "Supported: replaces, timer\r\n" +
+            "Content-Type: application/sdp\r\n" +
+            "Content-Length: 309\r\n\r\n" +
+            "v=0\r\n" +
+            "o=root 1313952988 1313952988 IN IP4 " + lIP + "\r\n" +
+            "s=Asterisk PBX 11.11.0\r\n" +
+            "c=IN IP4 " + lIP + "\r\n" +
+            "t=0 0\r\n" +
+            "m=audio 15272 RTP/AVP 0 18 8 101\r\n" +
+            "a=rtpmap:0 PCMU/8000\r\n" +
+            "a=rtpmap:18 G729/8000\r\n" +
+            "a=fmtp:18 annexb=no\r\n" +
+            "a=rtpmap:8 PCMA/8000\r\n" +
+            "a=rtpmap:101 telephone-event/8000\r\n" +
+            "a=fmtp:101 0-16\r\n" +
+            "a=ptime:20\r\n" +
+            "a=sendrecv\r\n\r\n"; 
 
-        chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
-
-        let INVITE : string = "INVITE sip:30307864723569@72.13.65.18 SIP/2.0\r\n" +
-          "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK399ac27d\r\n" +
-          "Max-Forwards: 70\r\n" +
-          "From: <sip:3055886662@" +  lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
-          "To: <sip:30307864723569@72.13.65.18>\r\n" +
-          "Contact: <sip:3055886662@" +  lIP + ":" + lPort +">\r\n" +
-          "Call-ID: 290997367d34cda94f9da5952f20ae12@" +  lIP + ":" + lPort +"\r\n" +
-          "CSeq: 102 INVITE\r\n" +
-          "User-Agent: IonicSIP UA\r\n" +
-          "Date: Wed, 01 Feb 2017 14:09:52 GMT\r\n" +
-          "Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY, INFO, PUBLISH, MESSAGE\r\n" +
-          "Supported: replaces, timer\r\n" +
-          "Content-Type: application/sdp\r\n" +
-          "Content-Length: 309\r\n\r\n" +
-          "v=0\r\n" +
-          "o=root 1313952988 1313952988 IN IP4 " + lIP + "\r\n" +
-          "s=Asterisk PBX 11.11.0\r\n" +
-          "c=IN IP4 " + lIP + "\r\n" +
-          "t=0 0\r\n" +
-          "m=audio 15272 RTP/AVP 0 18 8 101\r\n" +
-          "a=rtpmap:0 PCMU/8000\r\n" +
-          "a=rtpmap:18 G729/8000\r\n" +
-          "a=fmtp:18 annexb=no\r\n" +
-          "a=rtpmap:8 PCMA/8000\r\n" +
-          "a=rtpmap:101 telephone-event/8000\r\n" +
-          "a=fmtp:101 0-16\r\n" +
-          "a=ptime:20\r\n" +
-          "a=sendrecv\r\n\r\n"; 
-
-        console.log("Msg to be sent: " + INVITE);
-        var buf = new ArrayBuffer(INVITE.length);
-        var bufView = new Uint8Array(buf);
-        for (var i=0, strLen=INVITE.length; i < strLen; i++) {
-            bufView[i] = INVITE.charCodeAt(i);
-        }
-        chrome.sockets.udp.send(createInfo.socketId, buf, remoteIP, remotePort, (sendInfo) => {
-            console.log('Inside Send: ' + JSON.stringify(sendInfo));    
-          if (sendInfo.resultCode < 0) {
-            console.log('Send: fail: ' + sendInfo.resultCode);
-            chrome.sockets.udp.close(createInfo.socketId);
-          } else {
-            console.log('Send: success ' + sendInfo.resultCode);
+          console.log("Msg to be sent: " + INVITE);
+          var buf = new ArrayBuffer(INVITE.length);
+          var bufView = new Uint8Array(buf);
+          for (var i=0, strLen=INVITE.length; i < strLen; i++) {
+              bufView[i] = INVITE.charCodeAt(i);
           }
-        });
-      });
-    });
+          chrome.sockets.udp.send(createInfo.socketId, buf, remoteIP, remotePort, (sendInfo) => {
+              console.log('Inside Send: ' + JSON.stringify(sendInfo));    
+            if (sendInfo.resultCode < 0) {
+              console.log('Send: fail: ' + sendInfo.resultCode);
+              chrome.sockets.udp.close(createInfo.socketId);
+            } else {
+              console.log('Send: success ' + sendInfo.resultCode);
+            }
+          });//socket send
 
-  }
+          });
+          
+      });//socket bind
+    });//socket create
+
+  }//UDPSend start
 
   SendACK = (ackType : number, msg : string) => {
     //local vars for now
