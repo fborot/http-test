@@ -85,17 +85,19 @@ export class HomePage {
         //     });
         //   }
         // });   
-        chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
-        let OPTIONS2 : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
-          "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK313a.3328fa72.0\r\n" + 
-          "To: sip:72.13.65.18:5060\r\n" +
-          "From: <sip:3055886662@" +  lIP + ":" + lPort +">;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
-          "CSeq: 14 OPTIONS\r\n" +
-          "Call-ID: 4070cdfb649ada0d-10455@64.45.157.102\r\n" +
-          "Max-Forwards: 70\r\n" +
-          "Content-Length: 0\r\n" +
-          "User-Agent: IonicSIP UA\r\n\r\n";
 
+        // let OPTIONS2 : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
+        //   "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK313a.3328fa72.0\r\n" + 
+        //   "To: sip:72.13.65.18:5060\r\n" +
+        //   "From: <sip:3055886662@" +  lIP + ":" + lPort +">;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
+        //   "CSeq: 14 OPTIONS\r\n" +
+        //   "Call-ID: 4070cdfb649ada0d-10455@64.45.157.102\r\n" +
+        //   "Max-Forwards: 70\r\n" +
+        //   "Content-Length: 0\r\n" +
+        //   "User-Agent: IonicSIP UA\r\n\r\n";
+
+        chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
+        
         let OPTIONS : string = "INVITE sip:30307864723569@72.13.65.18 SIP/2.0\r\n" +
           "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK399ac27d\r\n" +
           "Max-Forwards: 70\r\n" +
