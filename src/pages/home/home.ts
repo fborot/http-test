@@ -17,12 +17,14 @@ export class HomePage {
   port : number;
   socket : any;
   connected : boolean;
+  toTag : string;
 
   constructor(public navCtrl: NavController, public http: Http) {
     console.log("Constructor called");    
     this.Myhttp = http;
     this.socket = -1;
     this.connected = false;
+    this.toTag = "";
   }
 
 
@@ -165,7 +167,7 @@ export class HomePage {
       let callID : string = msg.substr(index1, index2 - index1);
       
       index1 = index2 = 0;
-      index1 = msg.indexOf("Contact: <sip:") + 15;
+      index1 = msg.indexOf("Contact: <sip:") + 14;
       index2 = msg.indexOf(">\r\n",index1);
       let RURI : string = msg.substr(index1, index2 - index1);
 
@@ -174,6 +176,7 @@ export class HomePage {
       index2 = msg.indexOf(";tag=",index1) + 5;
       let index3 : number = msg.indexOf("\r\n",index2);
       let toTag : string = msg.substr(index2, index3 - index2);
+      this.toTag = toTag;
       
       let positiveACK = "ACK sip:" + RURI + " SIP/2.0\r\n" +
         "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK250f721e\r\n" +
@@ -233,11 +236,11 @@ export class HomePage {
     console.log('Inside SendBYE. Preparing ACK for an Accepted Request.');
    
     let BYE = "BYE sip:430307864723569@72.13.65.66:5060 SIP/2.0\r\n" +
-      "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK1234abcd\r\n" +
+      "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK1234abcd.1\r\n" +
       "Route: <sip:72.13.65.18;lr>\r\n" +
       "Max-Forwards: 70\r\n" +
-      "From: <sip:7864723569@" + lIP + ":" + lPort +">;tag=as0d69e2eb\r\n" +
-      "To: <sip:30303055886662@72.13.65.18>;tag=as041bed04\r\n" +
+      "From: <sip:7864723569@" + lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
+      "To: <sip:30303055886662@72.13.65.18>;tag=" + this.toTag + "\r\n" +
       "Call-ID: 290997367d34cda94f9da5952f20ae12@" +  lIP + ":" + lPort +"\r\n" +
       "CSeq: 103 BYE\r\n" +
       "User-Agent: IonicSIP UA\r\n" +
