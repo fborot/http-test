@@ -293,7 +293,7 @@ export class HomePage {
             }
             
             chrome.sockets.udp.onReceive.removeListener(this.UDPReceiveListener);
-            chrome.sockets.udp.close(info.socketId,function(){
+            chrome.sockets.udp.close(info.socketId,() => {
               console.log('Closing socketid: ' + info.socketId);
               this.connected = false;
               console.log('Setting connected flag to false.');
