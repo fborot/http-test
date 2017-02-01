@@ -156,18 +156,18 @@ export class HomePage {
     } else {
       console.log('Inside SendACK. Preparing ACK for an Accepted Request.');
 
-      let index1 : number = msg.indexOf("Call-ID: ") + 10;
+      let index1 : number = msg.indexOf("Call-ID: ") + 9;
       let index2 : number = msg.indexOf("\r\n",index1);
       let callID : string = msg.substr(index1, index2 - index1);
       
       index1 = index2 = 0;
-      index1 = msg.indexOf("Contact: <sip:") + 16;
+      index1 = msg.indexOf("Contact: <sip:") + 15;
       index2 = msg.indexOf(">\r\n",index1);
       let RURI : string = msg.substr(index1, index2 - index1);
 
       index1 = index2 = 0;
       index1 = msg.indexOf("To:");
-      index2 = msg.indexOf(";tag=",index1) + 6;
+      index2 = msg.indexOf(";tag=",index1) + 5;
       let index3 : number = msg.indexOf("\r\n",index2);
       let toTag : string = msg.substr(index2, index3 - index2);
       
@@ -175,8 +175,8 @@ export class HomePage {
         "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK250f721e\r\n" +
         "Route: <sip:204.9.238.50;lr>\r\n" +
         "Max-Forwards: 70\r\n" +
-        "From: <sip:7864723569@" + lIP + ":" + lPort +">;tag=" + toTag +"\r\n" +
-        "To: <sip:30303055886662@204.9.238.50>;tag=as72bc3aca\r\n" +
+        "From: <sip:7864723569@" + lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
+        "To: <sip:30303055886662@204.9.238.50>;tag=" + toTag +"\r\n" +
         "Contact: <sip:7864723569@" + lIP + ":" + lPort +">\r\n" +
         "Call-ID: " + callID + "\r\n" +
         "CSeq: 102 ACK\r\n" +
