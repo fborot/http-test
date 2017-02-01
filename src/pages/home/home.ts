@@ -155,53 +155,59 @@ export class HomePage {
     //local vars for now
     let lPort : number = 45678;//-1;
     let lIP : string = "10.100.61.17"; //"";
-    
+    let lviaBranch : string = "";
+    let RURI : string = "";
+    let callID : string = "";
+    let toTag : string =  "";
+
     if (ackType < 0){
       console.log('Inside SendACK. Preparing ACK for a Rejected Request.');
+      lviaBranch = "z9hG4bKqwerty.0";
 
     } else {
       console.log('Inside SendACK. Preparing ACK for an Accepted Request.');
+      lviaBranch = "z9hG4bK250f721e;"
 
       let index1 : number = msg.indexOf("Call-ID: ") + 9;
       let index2 : number = msg.indexOf("\r\n",index1);
-      let callID : string = msg.substr(index1, index2 - index1);
+      callID = msg.substr(index1, index2 - index1);
       
       index1 = index2 = 0;
       index1 = msg.indexOf("Contact: <sip:") + 14;
       index2 = msg.indexOf(">\r\n",index1);
-      let RURI : string = msg.substr(index1, index2 - index1);
+      RURI = msg.substr(index1, index2 - index1);
 
       index1 = index2 = 0;
       index1 = msg.indexOf("To:");
       index2 = msg.indexOf(";tag=",index1) + 5;
       let index3 : number = msg.indexOf("\r\n",index2);
-      let toTag : string = msg.substr(index2, index3 - index2);
+      toTag = msg.substr(index2, index3 - index2);
       this.toTag = toTag;
-      
-      let positiveACK = "ACK sip:" + RURI + " SIP/2.0\r\n" +
-        "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK250f721e\r\n" +
-        "Route: <sip:72.13.65.18;lr>\r\n" +
-        "Max-Forwards: 70\r\n" +
-        "From: <sip:3055886662@" + lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
-        "To: <sip:30307864723569@72.13.65.18>;tag=" + toTag +"\r\n" +
-        "Contact: <sip:3055886662@" + lIP + ":" + lPort +">\r\n" +
-        "Call-ID: " + callID + "\r\n" +
-        "CSeq: 102 ACK\r\n" +
-        "User-Agent: IonicSIP UA\r\n\r\n" +
-        "Content-Length: 0\r\n\r\n";
-
-        console.log("Msg to be sent: " + positiveACK);
-        var buf = new ArrayBuffer(positiveACK.length);
-        var bufView = new Uint8Array(buf);
-        for (var i=0, strLen=positiveACK.length; i < strLen; i++) {
-            bufView[i] = positiveACK.charCodeAt(i);
-        }
-        chrome.sockets.udp.send(this.socket, buf, '72.13.65.18', 5060, (sendInfo) => {
-            console.log('Sending ACK: ' + JSON.stringify(sendInfo));   
-            console.log('Sending ACK: result ' + sendInfo.resultCode);
-            this.connected = true;
-        });
     }
+    let ACK = "ACK sip:" + RURI + " SIP/2.0\r\n" +
+      "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=" + lviaBranch +"\r\n" +
+      "Route: <sip:72.13.65.18;lr>\r\n" +
+      "Max-Forwards: 70\r\n" +
+      "From: <sip:3055886662@" + lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
+      "To: <sip:30307864723569@72.13.65.18>;tag=" + toTag +"\r\n" +
+      "Contact: <sip:3055886662@" + lIP + ":" + lPort +">\r\n" +
+      "Call-ID: " + callID + "\r\n" +
+      "CSeq: 102 ACK\r\n" +
+      "User-Agent: IonicSIP UA\r\n" +
+      "Content-Length: 0\r\n\r\n";
+
+      console.log("Msg to be sent: " + ACK);
+      var buf = new ArrayBuffer(ACK.length);
+      var bufView = new Uint8Array(buf);
+      for (var i=0, strLen=ACK.length; i < strLen; i++) {
+          bufView[i] = ACK.charCodeAt(i);
+      }
+      chrome.sockets.udp.send(this.socket, buf, '72.13.65.18', 5060, (sendInfo) => {
+          console.log('Sending ACK: ' + JSON.stringify(sendInfo));   
+          console.log('Sending ACK: result ' + sendInfo.resultCode);
+          this.connected = true;
+      });
+    
   }
 
   SendResponse(requestMethod : string, msg : string){
