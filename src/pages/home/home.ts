@@ -66,7 +66,7 @@ export class HomePage {
         chrome.sockets.udp.getInfo(createInfo.socketId, (socketInfo) => {
           lIP = socketInfo.localAddress;
           lPort = socketInfo.localPort;
-          console.log('Socket_IP:Port ' + lIP +  ":" + lPort);
+          console.log('Socket_IP:Port ' + JSON.stringify(socketInfo) +  ":" + lIP +  ":" + lPort);
 
           chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
 
