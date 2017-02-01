@@ -86,7 +86,7 @@ export class HomePage {
         //   }
         // });   
         chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
-        let OPTIONS : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
+        let OPTIONS2 : string = "OPTIONS sip:72.13.65.18:5060 SIP/2.0\r\n" +
           "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK313a.3328fa72.0\r\n" + 
           "To: sip:72.13.65.18:5060\r\n" +
           "From: <sip:3055886662@" +  lIP + ":" + lPort +">;tag=4f4a12316b227d3fcbd4d3728a5ab380-54ef\r\n" +
@@ -95,6 +95,35 @@ export class HomePage {
           "Max-Forwards: 70\r\n" +
           "Content-Length: 0\r\n" +
           "User-Agent: IonicSIP UA\r\n\r\n";
+
+        let OPTIONS : string = "INVITE sip:30303055886662@204.9.238.50 SIP/2.0"
+          "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK399ac27d\r\n"
+          "Max-Forwards: 70\r\n" +
+          "From: <sip:7864723569@" +  lIP + ":" + lPort +">;tag=as0dc3ed07\r\n" +
+          "To: <sip:30303055886662@204.9.238.50>\r\n" +
+          "Contact: <sip:7864723569@" +  lIP + ":" + lPort +">\r\n" +
+          "Call-ID: 290997367d34cda94f9da5952f20ae12@" +  lIP + ":" + lPort +"\r\n" +
+          "CSeq: 102 INVITE\r\n" +
+          "User-Agent: FPBX-2.8.1(11.11.0)\r\n" +
+          "Date: Wed, 01 Feb 2017 14:09:52 GMT\r\n" +
+          "Allow: INVITE, ACK, CANCEL, OPTIONS, BYE, REFER, SUBSCRIBE, NOTIFY, INFO, PUBLISH, MESSAGE\r\n" +
+          "Supported: replaces, timer\r\n" +
+          "Content-Type: application/sdp\r\n" +
+          "Content-Length: 309\r\n\r\n" +
+          "v=0\r\n" +
+          "o=root 1313952988 1313952988 IN IP4 " + lIP + "\r\n" +
+          "s=Asterisk PBX 11.11.0\r\n" +
+          "c=IN IP4 " + lIP + "\r\n" +
+          "t=0 0\r\n" +
+          "m=audio 15272 RTP/AVP 0 18 8 101\r\n" +
+          "a=rtpmap:0 PCMU/8000\r\n" +
+          "a=rtpmap:18 G729/8000\r\n" +
+          "a=fmtp:18 annexb=no\r\n" +
+          "a=rtpmap:8 PCMA/8000\r\n" +
+          "a=rtpmap:101 telephone-event/8000\r\n" +
+          "a=fmtp:101 0-16\r\n" +
+          "a=ptime:20\r\n" +
+          "a=sendrecv\r\n\r\n"; 
 
         var buf = new ArrayBuffer(OPTIONS.length);
         var bufView = new Uint8Array(buf);
