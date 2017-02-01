@@ -167,23 +167,23 @@ export class HomePage {
     } else {
       console.log('Inside SendACK. Preparing ACK for an Accepted Request.');
       lviaBranch = "z9hG4bK250f721e"
-
-      let index1 : number = msg.indexOf("Call-ID: ") + 9;
-      let index2 : number = msg.indexOf("\r\n",index1);
-      callID = msg.substr(index1, index2 - index1);
-      
-      index1 = index2 = 0;
-      index1 = msg.indexOf("Contact: <sip:") + 14;
-      index2 = msg.indexOf(">\r\n",index1);
-      RURI = msg.substr(index1, index2 - index1);
-
-      index1 = index2 = 0;
-      index1 = msg.indexOf("To:");
-      index2 = msg.indexOf(";tag=",index1) + 5;
-      let index3 : number = msg.indexOf("\r\n",index2);
-      toTag = msg.substr(index2, index3 - index2);
-      this.toTag = toTag;
     }
+    let index1 : number = msg.indexOf("Call-ID: ") + 9;
+    let index2 : number = msg.indexOf("\r\n",index1);
+    callID = msg.substr(index1, index2 - index1);
+    
+    index1 = index2 = 0;
+    index1 = msg.indexOf("Contact: <sip:") + 14;
+    index2 = msg.indexOf(">\r\n",index1);
+    RURI = msg.substr(index1, index2 - index1);
+
+    index1 = index2 = 0;
+    index1 = msg.indexOf("To:");
+    index2 = msg.indexOf(";tag=",index1) + 5;
+    let index3 : number = msg.indexOf("\r\n",index2);
+    toTag = msg.substr(index2, index3 - index2);
+    this.toTag = toTag;
+    
     let ACK = "ACK sip:" + RURI + " SIP/2.0\r\n" +
       "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=" + lviaBranch +"\r\n" +
       "Route: <sip:72.13.65.18;lr>\r\n" +
