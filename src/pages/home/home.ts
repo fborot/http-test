@@ -97,7 +97,7 @@ export class HomePage {
         //   "User-Agent: IonicSIP UA\r\n\r\n";
 
         chrome.sockets.udp.onReceive.addListener(this.UDPReceiveListener);
-        
+
         let OPTIONS : string = "INVITE sip:30307864723569@72.13.65.18 SIP/2.0\r\n" +
           "Via: SIP/2.0/UDP " + lIP + ":" + lPort +";branch=z9hG4bK399ac27d\r\n" +
           "Max-Forwards: 70\r\n" +
@@ -260,7 +260,7 @@ export class HomePage {
           //}
   }
 
-  sendMsg(){
+  startCall(){
 
     let PORT = 5060;
     this.UDPSend('72.13.65.18',PORT);
