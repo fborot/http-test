@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import xml2js from 'xml2js'; 
-import { Network, NetworkConnection } from 'ionic-native';
+import { Network} from 'ionic-native';
 
 declare const chrome;
 
@@ -19,7 +19,6 @@ export class HomePage {
   socket : any;
   connected : boolean;
   toTag : string;
-  myNet : Network;
 
   constructor(public navCtrl: NavController, public http: Http) {
     console.log("Constructor called");    
@@ -295,7 +294,7 @@ export class HomePage {
    let connectSubscription = Network.onConnect().subscribe(() => {
      console.log('network was connected :-)');
      setTimeout(() => {
-       console.log('network type: ' + NetworkConnection.type);
+       console.log('network type: ' + Network.NetworkConnection.type);
        console.log('network Object: ' + JSON.stringify(Network));
      }, 3000);
    });
