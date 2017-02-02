@@ -6,6 +6,7 @@ import xml2js from 'xml2js';
 import { Network } from 'ionic-native';
 
 declare const chrome;
+declare const Network;
 
 @Component({
   selector: 'page-home',
@@ -294,7 +295,7 @@ export class HomePage {
    let connectSubscription = Network.onConnect().subscribe(() => {
      console.log('network was connected :-)');
      setTimeout(() => {
-       console.log('network type: ' + Network.Connection.type);
+       console.log('network type: ' + Network.type);
        console.log('network Object: ' + JSON.stringify(Network));
      }, 3000);
    });
