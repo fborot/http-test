@@ -293,11 +293,11 @@ export class HomePage {
 
    let connectSubscription = Network.onConnect().subscribe(() => {
      console.log('network was connected :-)');
-     setTimeout(function() {
+     setTimeout(() => {
        //console.log('network type: ' + Network);
        console.log('network Object: ' + JSON.stringify(Network);
      }, 3000);
-   });
+   );
 
    let disconnectSubscription = Network.onDisconnect().subscribe(() => {
      console.log('network was disconnected :-(');
