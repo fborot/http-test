@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import xml2js from 'xml2js'; 
-import { Network } from 'ionic-native';
+import { Network, NetworkConnection } from 'ionic-native';
 
 declare const chrome;
 
@@ -291,7 +291,7 @@ export class HomePage {
 
   checkNetworkInfo(){
    console.log('Subscribed!!');
-    
+
    let connectSubscription = Network.onConnect().subscribe(() => {
      console.log('network was connected :-)');
      setTimeout(() => {
