@@ -294,8 +294,8 @@ export class HomePage {
    let connectSubscription = Network.onConnect().subscribe(() => {
      console.log('network was connected :-)');
      setTimeout(() => {
-       console.log('network type: ' + Network.connection);
-       console.log('network Object: ' + JSON.stringify(Network));
+       console.log('network type: ' + Network.connection.type);
+       console.log('network Object: ' + JSON.stringify(Network.connection));
      }, 3000);
    });
 
