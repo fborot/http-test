@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import xml2js from 'xml2js'; 
-import { NetworkConnection} from 'ionic-native';
+import { Network} from 'ionic-native';
 
 declare const chrome;
 
@@ -291,17 +291,17 @@ export class HomePage {
   checkNetworkInfo(){
    console.log('Subscribed!!');
 
-  //  let connectSubscription = Network.onConnect().subscribe(() => {
-  //    console.log('network was connected :-)');
-  //    setTimeout(() => {
-  //      //console.log('network type: ' + Network.connection.type);
-  //      console.log('network Object: ' + JSON.stringify(Network.connection));
-  //    }, 3000);
-  //  });
+   let connectSubscription = Network.onConnect().subscribe(() => {
+     console.log('network was connected :-)');
+     setTimeout(() => {
+       //console.log('network type: ' + Network.connection.type);
+       console.log('network Object: ' + JSON.stringify(Network.connection));
+     }, 3000);
+   });
 
-  //  let disconnectSubscription = Network.onDisconnect().subscribe(() => {
-  //    console.log('network was disconnected :-(');
-  //  });
+   let disconnectSubscription = Network.onDisconnect().subscribe(() => {
+     console.log('network was disconnected :-(');
+   });
 
   }
 }
