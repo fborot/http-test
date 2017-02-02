@@ -61,7 +61,7 @@ export class HomePage {
 
       this.socket = createInfo.socketId;
       console.log('After assigning socketid: ' + this.socket + ":" + createInfo.socketId);
-      chrome.sockets.udp.bind(createInfo.socketId, "0.0.0.0", 0, (result) => {
+      chrome.sockets.udp.bind(createInfo.socketId, "10.100.61.17", 0, (result) => {
         console.log('Bind result: ' + result);
         console.log('new value: ' + createInfo.socketId);    
         chrome.sockets.udp.getInfo(createInfo.socketId, (socketInfo) => {
@@ -294,8 +294,7 @@ export class HomePage {
    let connectSubscription = Network.onConnect().subscribe(() => {
      console.log('network was connected :-)');
      setTimeout(() => {
-       console.log('network type: ' + Network.type + ", downlinkMax: " + Network.downlinkMax);
-       console.log('network Object: ' + JSON.stringify(Network));
+       console.log('network type: ' + Network.type);
      }, 3000);
    });
 
