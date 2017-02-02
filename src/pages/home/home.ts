@@ -6,7 +6,6 @@ import xml2js from 'xml2js';
 import { Network } from 'ionic-native';
 
 declare const chrome;
-declare const Network;
 
 @Component({
   selector: 'page-home',
