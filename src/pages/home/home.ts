@@ -7,6 +7,7 @@ import { Network} from 'ionic-native';
 
 declare const chrome;
 declare const audioinput;
+declare const modusecho;
 
 @Component({
   selector: 'page-home',
@@ -48,7 +49,7 @@ export class HomePage {
   isDataFromMic : boolean;
 
   bufferArray : number;
-
+  
   constructor(public navCtrl: NavController, public http: Http) {
     console.log("Constructor called");    
     this.Myhttp = http;
@@ -81,7 +82,6 @@ export class HomePage {
     this.currentQueueSend = 0;
     this.currentChunk = 0;
     this.isDataFromMic = false;
-
   }
 
 
@@ -732,4 +732,7 @@ export class HomePage {
     }
   }
 
+  testEchoPlugin = () => {
+    modusecho.echo("my string");
+  }
 }
